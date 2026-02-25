@@ -39,7 +39,7 @@ export function DesktopProvider({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    document.body.style.zoom = String(zoom);
+    document.body.style.setProperty('zoom', String(zoom));
     document.documentElement.style.setProperty('--zoom', String(zoom));
   }, [zoom]);
 

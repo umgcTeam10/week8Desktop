@@ -18,7 +18,7 @@ describe('Accessibility', () => {
 
   it('main has id main-content', () => {
     render(<App />);
-    expect(document.getElementById('main-content')).toBeInTheDocument();
+    expect(screen.getByRole('main')).toHaveAttribute('id', 'main-content');
   });
 
   it('toolbar has role toolbar', () => {

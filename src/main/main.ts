@@ -2,7 +2,6 @@ import { app, BrowserWindow, Menu } from 'electron';
 import * as path from 'path';
 
 const isMac = process.platform === 'darwin';
-const isDev = process.env.NODE_ENV !== 'production';
 
 let mainWindow: BrowserWindow | null = null;
 

@@ -14,7 +14,7 @@ export interface SignInErrors {
  * Design 2.2 Sign In, 2.4 Error State.
  */
 export function SignInScreen() {
-  const { setAuthPhase, setError, error, setError: setContextError } = useDesktop();
+  const { setAuthPhase, setError: setContextError } = useDesktop();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);

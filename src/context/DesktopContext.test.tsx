@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { DesktopProvider, useDesktop } from './DesktopContext';
 
 function TestConsumer() {
-  const { screen: s, setScreen, highContrast, setHighContrast, zoom, setZoom, openModal, closeModal } = useDesktop();
+  const { screen: s, setScreen, highContrast, setHighContrast, setZoom, openModal, closeModal } = useDesktop();
   return (
     <div>
       <span data-testid="screen">{s}</span>

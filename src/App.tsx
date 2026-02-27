@@ -101,16 +101,6 @@ function AppContent() {
     }
   };
 
-  const screenLabels: Record<string, string> = {
-    dashboard: 'Home Dashboard',
-    'health-logs': 'Health Logs',
-    messages: 'Messages',
-    calendar: 'Calendar',
-    tasks: 'Tasks',
-    profile: 'Profile & Settings',
-    search: 'Search',
-  };
-
   if (authPhase === 'role') {
     return (
       <>

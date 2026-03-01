@@ -1,6 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useDesktop } from '../context/DesktopContext';
 import { LeftPanelWelcome } from '../components/LeftPanelWelcome';
+import {
+  AlertCircleIcon,
+  EyeIcon,
+  FingerprintIcon,
+  LockIcon,
+  MailIcon,
+  WarningTriangleIcon,
+} from '../components/AuthIcons';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_PASSWORD_LENGTH = 8;
@@ -17,6 +25,7 @@ export function SignInScreen() {
   const { setAuthPhase, setError: setContextError } = useDesktop();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState<SignInErrors>({});
   const [touched, setTouched] = useState({ email: false, password: false });
@@ -83,17 +92,20 @@ export function SignInScreen() {
           Use Tab to navigate, Enter to activate
         </p>
         <h2 id="sign-in-heading">Sign in to your account</h2>
-        <p className="panel-subtitle">Enter your credentials to access your healthcare portal.</p>
+        <p className="panel-subtitle">Enter your credentials to access your healthcare portal</p>
 
         {hasErrors && (
           <div className="error-summary" role="alert">
-            <h3>Let&apos;s fix {Object.keys(errors).length} thing{Object.keys(errors).length === 1 ? '' : 's'} to sign in.</h3>
-            <p>We found a couple of issues with the information you entered:</p>
-            <ol>
+            <h3 className="error-summary-title">
+              <AlertCircleIcon className="error-summary-icon" />
+              Let&apos;s fix {Object.keys(errors).length} thing{Object.keys(errors).length === 1 ? '' : 's'} to sign in
+            </h3>
+            <p className="error-summary-intro">We found a couple of issues with the information you entered:</p>
+            <ol className="error-summary-list">
               {errors.email && <li>Email address — {errors.email}</li>}
               {errors.password && <li>Password — {errors.password}</li>}
             </ol>
-            <p>Please review the highlighted fields below.</p>
+            <p className="error-summary-outro">Please review the highlighted fields below.</p>
           </div>
         )}
 
@@ -106,22 +118,27 @@ export function SignInScreen() {
         >
           <div className="form-group">
             <label htmlFor="signin-email">Email address *</label>
-            <input
-              ref={emailRef}
-              id="signin-email"
-              type="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              onBlur={() => setTouched((t) => ({ ...t, email: true }))}
-              placeholder="your.email@example.com"
-              aria-required="true"
-              aria-invalid={!!errors.email}
-              aria-describedby={errors.email ? 'signin-email-error' : undefined}
-              className={errors.email ? 'input-error' : ''}
-            />
+            <div className={`input-shell ${errors.email ? 'input-shell-error' : ''}`}>
+              <MailIcon className="input-leading-icon" />
+              <input
+                ref={emailRef}
+                id="signin-email"
+                type="email"
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onBlur={() => setTouched((t) => ({ ...t, email: true }))}
+                placeholder="your.email@example.com"
+                aria-required="true"
+                aria-invalid={!!errors.email}
+                aria-describedby={errors.email ? 'signin-email-error' : undefined}
+                className={errors.email ? 'input-error' : ''}
+              />
+              {errors.email && <AlertCircleIcon className="input-error-icon" />}
+            </div>
             {errors.email && (
-              <p id="signin-email-error" className="form-error" role="alert">
+              <p id="signin-email-error" className="form-error form-error-with-icon" role="alert">
+                <WarningTriangleIcon className="form-error-icon" />
                 {errors.email}
               </p>
             )}
@@ -129,28 +146,42 @@ export function SignInScreen() {
           </div>
           <div className="form-group">
             <label htmlFor="signin-password">Password *</label>
-            <input
-              ref={passwordRef}
-              id="signin-password"
-              type="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onBlur={() => setTouched((t) => ({ ...t, password: true }))}
-              placeholder="Enter your password"
-              aria-required="true"
-              aria-invalid={!!errors.password}
-              aria-describedby={errors.password ? 'signin-password-error' : undefined}
-              className={errors.password ? 'input-error' : ''}
-            />
+            <div className={`input-shell ${errors.password ? 'input-shell-error' : ''}`}>
+              <LockIcon className="input-leading-icon" />
+              <input
+                ref={passwordRef}
+                id="signin-password"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onBlur={() => setTouched((t) => ({ ...t, password: true }))}
+                placeholder="Enter your password"
+                aria-required="true"
+                aria-invalid={!!errors.password}
+                aria-describedby={errors.password ? 'signin-password-error' : undefined}
+                className={errors.password ? 'input-error' : ''}
+              />
+              {errors.password && <AlertCircleIcon className="input-error-icon" />}
+              <button
+                type="button"
+                className="input-icon-button"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                onClick={() => setShowPassword((value) => !value)}
+              >
+                <EyeIcon className="input-trailing-icon" />
+              </button>
+            </div>
             {errors.password && (
-              <p id="signin-password-error" className="form-error" role="alert">
+              <p id="signin-password-error" className="form-error form-error-with-icon" role="alert">
+                <WarningTriangleIcon className="form-error-icon" />
                 {errors.password}
               </p>
             )}
-            <p className="form-helper">
-              <a href="#forgot" className="link">Forgot password?</a> Enter the password for your account.
-            </p>
+            <div className="form-helper-row">
+              <p className="form-helper">Enter the password for your account</p>
+              <a href="#forgot" className="link">Forgot password?</a>
+            </div>
           </div>
           <div className="form-group">
             <label className="checkbox-label">
@@ -165,9 +196,15 @@ export function SignInScreen() {
             <p className="form-helper">Stay signed in for faster access. Don&apos;t use on shared computers.</p>
           </div>
           <button type="submit" className="btn-primary">Sign in</button>
-          <button type="button" className="btn-secondary">Email me a sign-in link</button>
+          <button type="button" className="btn-secondary btn-ghost-strong">
+            <MailIcon className="button-icon" />
+            Email me a sign-in link
+          </button>
           <p className="separator">Or use a secure alternative</p>
-          <button type="button" className="btn-secondary">Sign in with Windows Hello / Passkey</button>
+          <button type="button" className="btn-secondary btn-ghost-strong">
+            <FingerprintIcon className="button-icon" />
+            Sign in with Windows Hello / Passkey
+          </button>
           <p className="form-helper">Optional: Use biometrics or a security key</p>
         </form>
       </div>

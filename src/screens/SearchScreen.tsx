@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { mockHealthLogs } from '../data/mockData';
 import { mockMessages } from '../data/mockData';
+import { PersistentNowBar } from '../components/PersistentNowBar';
 
 /**
  * Global search (Ctrl+F). Design: Search settings / global search bar.
@@ -20,8 +21,13 @@ export function SearchScreen() {
   );
 
   return (
-    <div className="search-content">
-      <h2>Search</h2>
+    <div className="app-page search-page search-content">
+      <header className="app-page-topbar" aria-label="Search status">
+        <h2>Search</h2>
+        <p>Monday, January 26, 2026 | 4:02 PM</p>
+        <div className="app-page-user">Robert <span className="tag tag-blue">Patient</span></div>
+      </header>
+      <PersistentNowBar />
       <div className="form-group">
         <label htmlFor="search-input">Search (Ctrl+F)</label>
         <input

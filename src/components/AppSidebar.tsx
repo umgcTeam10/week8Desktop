@@ -1,13 +1,15 @@
 import React from 'react';
 import { useDesktop, Screen } from '../context/DesktopContext';
+import { HeartBadgeIcon } from './AuthIcons';
+import { CalendarIcon, ClipboardIcon, HeartOutlineIcon, HomeIcon, MessageIcon, UserIcon } from './AppIcons';
 
-const navItems: { key: Screen; label: string }[] = [
-  { key: 'dashboard', label: 'Dashboard' },
-  { key: 'health-logs', label: 'Health Logs' },
-  { key: 'messages', label: 'Messages' },
-  { key: 'calendar', label: 'Calendar' },
-  { key: 'tasks', label: 'Tasks' },
-  { key: 'profile', label: 'Profile' },
+const navItems: { key: Screen; label: string; Icon: React.ComponentType<{ className?: string }> }[] = [
+  { key: 'dashboard', label: 'Dashboard', Icon: HomeIcon },
+  { key: 'health-logs', label: 'Health Logs', Icon: HeartOutlineIcon },
+  { key: 'messages', label: 'Messages', Icon: MessageIcon },
+  { key: 'calendar', label: 'Calendar', Icon: CalendarIcon },
+  { key: 'tasks', label: 'Tasks', Icon: ClipboardIcon },
+  { key: 'profile', label: 'Profile', Icon: UserIcon },
 ];
 
 export function AppSidebar() {
@@ -16,10 +18,11 @@ export function AppSidebar() {
   return (
     <aside className="app-sidebar" role="navigation" aria-label="Main navigation">
       <div className="app-sidebar-brand">
-        <span aria-hidden="true">♥</span> CareConnect
+        <HeartBadgeIcon className="app-sidebar-brand-icon" />
+        <span>CareConnect</span>
       </div>
       <nav className="app-sidebar-nav">
-        {navItems.map(({ key, label }) => (
+        {navItems.map(({ key, label, Icon }) => (
           <button
             type="button"
             key={key}
@@ -27,12 +30,20 @@ export function AppSidebar() {
             onClick={() => setScreen(key)}
             aria-current={screen === key ? 'page' : undefined}
           >
-            {label}
+            <span className="app-sidebar-nav-icon" aria-hidden="true">
+              <Icon className="app-sidebar-nav-icon-svg" />
+            </span>
+            <span className="app-sidebar-nav-label">{label}</span>
+            <span className="app-sidebar-nav-dot" aria-hidden="true" />
           </button>
         ))}
       </nav>
       <div className="app-sidebar-user">
-        Robert Patient
+        <span className="app-sidebar-user-avatar" aria-hidden="true">RP</span>
+        <span className="app-sidebar-user-meta">
+          <strong>Robert</strong>
+          <span>Patient</span>
+        </span>
       </div>
     </aside>
   );

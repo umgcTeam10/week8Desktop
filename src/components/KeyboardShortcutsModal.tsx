@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useDesktop } from '../context/DesktopContext';
+import { KeyboardIcon } from './AuthIcons';
 
 const isMac = typeof navigator !== 'undefined' && navigator.platform.toUpperCase().indexOf('MAC') >= 0;
 const mod = isMac ? 'Cmd' : 'Ctrl';
@@ -32,6 +33,23 @@ const navShortcuts = [
 export function KeyboardShortcutsModal() {
   const { closeModal } = useDesktop();
   const dialogRef = useRef<HTMLDivElement>(null);
+
+  const renderKeyCombo = (combo: string) => {
+    const keys = combo.split('+');
+    return (
+      <span className="shortcut-keys" aria-label={combo}>
+        <span className="sr-only">{combo}</span>
+        {keys.map((key, index) => (
+          <React.Fragment key={`${combo}-${key}-${index}`}>
+            <kbd className="keycap" aria-hidden="true">{key}</kbd>
+            {index < keys.length - 1 && (
+              <span className="shortcut-plus" aria-hidden="true">+</span>
+            )}
+          </React.Fragment>
+        ))}
+      </span>
+    );
+  };
 
   useEffect(() => {
     const previousActive = document.activeElement as HTMLElement | null;
@@ -79,45 +97,54 @@ export function KeyboardShortcutsModal() {
       ref={dialogRef}
     >
       <div className="modal-dialog modal-dialog-shortcuts">
-        <h2 id="shortcuts-title">Keyboard Shortcuts</h2>
+        <div className="shortcuts-header">
+          <div className="shortcuts-title-row">
+            <KeyboardIcon className="shortcuts-title-icon" />
+            <h2 id="shortcuts-title">Keyboard Shortcuts</h2>
+          </div>
+          <button type="button" className="shortcuts-close-button" onClick={closeModal} aria-label="Dismiss shortcuts">
+            ×
+          </button>
+        </div>
         <p className="modal-description">Use these shortcuts to navigate CareConnect efficiently.</p>
 
-        <section aria-labelledby="form-nav-heading">
-          <h3 id="form-nav-heading">Form Navigation</h3>
-          <table>
-            <tbody>
+        <div className="shortcuts-content">
+          <section className="shortcuts-section" aria-labelledby="form-nav-heading">
+            <h3 id="form-nav-heading">Form Navigation</h3>
+            <ul className="shortcuts-list">
               {formNavShortcuts.map((s, i) => (
-                <tr key={i}>
-                  <td><kbd>{s.keys}</kbd></td>
-                  <td>{s.action}</td>
-                </tr>
+                <li className="shortcut-row" key={i}>
+                  <span className="shortcut-action">{s.action}</span>
+                  {renderKeyCombo(s.keys)}
+                </li>
               ))}
-            </tbody>
-          </table>
-        </section>
+            </ul>
+          </section>
 
-        <section aria-labelledby="actions-heading">
-          <h3 id="actions-heading">Actions</h3>
-          <table>
-            <tbody>
+          <section className="shortcuts-section" aria-labelledby="actions-heading">
+            <h3 id="actions-heading">Actions</h3>
+            <ul className="shortcuts-list">
               {actionShortcuts.map((s, i) => (
-                <tr key={i}>
-                  <td><kbd>{s.keys}</kbd></td>
-                  <td>{s.action}</td>
-                </tr>
+                <li className="shortcut-row" key={i}>
+                  <span className="shortcut-action">{s.action}</span>
+                  {renderKeyCombo(s.keys)}
+                </li>
               ))}
               {navShortcuts.map((s, i) => (
-                <tr key={i}>
-                  <td><kbd>{s.keys}</kbd></td>
-                  <td>{s.action}</td>
-                </tr>
+                <li className="shortcut-row" key={i}>
+                  <span className="shortcut-action">{s.action}</span>
+                  {renderKeyCombo(s.keys)}
+                </li>
               ))}
-            </tbody>
-          </table>
-        </section>
+            </ul>
+          </section>
+        </div>
 
-        <div className="modal-actions">
-          <button type="button" onClick={closeModal} autoFocus>
+        <div className="shortcuts-footer">
+          <p className="shortcuts-hint">
+            Press <kbd className="keycap keycap-inline">Esc</kbd> to close
+          </p>
+          <button type="button" onClick={closeModal} className="btn-primary shortcuts-footer-close" autoFocus>
             Close
           </button>
         </div>

@@ -1,5 +1,7 @@
 import React from 'react';
 import { useDesktop } from '../context/DesktopContext';
+import { CalendarIcon, CheckCircleIcon, ClockIconSmall } from '../components/AppIcons';
+import { PersistentNowBar } from '../components/PersistentNowBar';
 
 /**
  * Design 2.7 Tasks Screen.
@@ -8,50 +10,95 @@ export function TasksScreen() {
   const { openModal } = useDesktop();
 
   return (
-    <div className="tasks-content">
-      <h2>Tasks</h2>
-      <p className="panel-subtitle">Manage your daily health tasks and activities.</p>
-      <div className="dashboard-banner" role="status">
-        Now: Physical Therapy Appointment — 02:00 PM — All care — <button type="button" className="link-button" onClick={() => {}}>View →</button>
+    <div className="app-page tasks-page">
+      <header className="app-page-topbar" aria-label="Tasks status">
+        <h2>Tasks</h2>
+        <p>Monday, January 26, 2026 | 4:02 PM</p>
+        <div className="app-page-user">Robert <span className="tag tag-blue">Patient</span></div>
+      </header>
+      <PersistentNowBar />
+
+      <section className="dashboard-heading" aria-labelledby="tasks-page-heading">
+        <h3 id="tasks-page-heading">Task Overview</h3>
+        <p>Manage your daily health tasks and activities</p>
+      </section>
+
+      <div className="tasks-summary dashboard-cards">
+        <article className="dashboard-card">
+          <span className="dashboard-card-icon"><CalendarIcon className="dashboard-card-icon-svg" /></span>
+          <div><strong>3</strong><span>Today</span></div>
+        </article>
+        <article className="dashboard-card">
+          <span className="dashboard-card-icon"><ClockIconSmall className="dashboard-card-icon-svg" /></span>
+          <div><strong>2</strong><span>Overdue</span></div>
+        </article>
+        <article className="dashboard-card">
+          <span className="dashboard-card-icon"><CheckCircleIcon className="dashboard-card-icon-svg" /></span>
+          <div><strong>1</strong><span>Done</span></div>
+        </article>
       </div>
-      <div className="tasks-summary">
-        <div className="dashboard-card">Today: 3 tasks</div>
-        <div className="dashboard-card dashboard-card-overdue">Overdue: 2</div>
-        <div className="dashboard-card dashboard-card-done">Done: 1</div>
-      </div>
+
       <div className="tasks-actions">
-        <button type="button" className="btn-primary" onClick={() => openModal('new-log')}>+ Add Task</button>
-        <input type="search" placeholder="Search tasks..." aria-label="Search tasks" className="search-input" />
+        <button type="button" className="btn-primary tasks-add-btn" onClick={() => openModal('new-log')}>+ Add Task</button>
+        <button type="button" className="tasks-filter-btn" aria-label="Task filters">Filter</button>
+        <input type="search" placeholder="Search tasks..." aria-label="Search tasks" className="search-input tasks-search-input" />
       </div>
       <div className="alert-banner" role="alert">
-        You have 2 overdue tasks <button type="button" className="link-button">View →</button>
+        <span>You have 2 overdue tasks</span>
+        <button type="button" className="link-button">View →</button>
       </div>
       <div className="tasks-tabs" role="tablist">
-        <button type="button" role="tab" aria-selected="true">Upcoming</button>
-        <button type="button" role="tab">Today</button>
+        <button type="button" role="tab">Upcoming</button>
+        <button type="button" role="tab" aria-selected="true">Today</button>
         <button type="button" role="tab">Overdue</button>
         <button type="button" role="tab">Done</button>
       </div>
-      <ul className="tasks-list" aria-label="Today's tasks">
-        <li className="list-item">
-          <input type="checkbox" aria-label="Mark Blood Pressure Check done" />
-          Blood Pressure Check — Record morning reading — 09:00 AM Jan 27 — With breakfast
-          <span className="tag">medium</span>
-          <button type="button" className="btn-primary">Done</button>
-          <button type="button" className="btn-secondary">Reschedule</button>
-        </li>
-        <li className="list-item">
-          <input type="checkbox" aria-label="Mark Prepare Lunch done" />
-          Prepare Lunch — Low-sodium, diabetic-friendly meal — 12:00 PM Jan 27
-          <span className="tag">medium</span>
-        </li>
-      </ul>
-      <aside className="tasks-now-card">
-        <h3>Physical Therapy Appointment</h3>
-        <p>Due now — 02:00 PM — At clinic</p>
-        <button type="button" className="btn-primary">Start</button>
-        <button type="button" className="btn-secondary">Snooze 10 min</button>
-      </aside>
+
+      <div className="tasks-layout">
+        <ul className="tasks-list" aria-label="Today's tasks">
+          <li className="list-item task-item-card">
+            <div className="task-item-main">
+              <input type="checkbox" aria-label="Mark Blood Pressure Check done" />
+              <div>
+                <div className="task-item-header">
+                  <strong>Blood Pressure Check</strong>
+                  <span className="tag">medium</span>
+                </div>
+                <p>Record morning blood pressure reading</p>
+                <p className="task-item-meta">09:00 AM | Jan 27</p>
+                <span className="task-item-chip">With breakfast</span>
+              </div>
+            </div>
+            <div className="task-item-actions">
+              <button type="button" className="btn-primary task-btn">Done</button>
+              <button type="button" className="btn-secondary task-btn">Reschedule</button>
+            </div>
+          </li>
+          <li className="list-item task-item-card">
+            <div className="task-item-main">
+              <input type="checkbox" aria-label="Mark Prepare Lunch done" />
+              <div>
+                <div className="task-item-header">
+                  <strong>Prepare Lunch</strong>
+                  <span className="tag">medium</span>
+                </div>
+                <p>Low-sodium, diabetic-friendly meal</p>
+                <p className="task-item-meta">12:00 PM | Jan 27</p>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <aside className="tasks-now-card">
+          <p className="tasks-now-label">Now</p>
+          <h3>Physical Therapy Appointment</h3>
+          <p>Due now - 02:00 PM - At clinic</p>
+          <div className="tasks-now-actions">
+            <button type="button" className="btn-primary task-btn">Start</button>
+            <button type="button" className="btn-secondary task-btn">Snooze 10 min</button>
+          </div>
+        </aside>
+      </div>
     </div>
   );
 }

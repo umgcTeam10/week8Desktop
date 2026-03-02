@@ -1875,8 +1875,8 @@ body.high-contrast .btn-secondary {
 
 /* Health logs */
 .health-logs-layout {
-  grid-template-columns: 292px minmax(0, 1fr);
-  gap: 1.05rem;
+  grid-template-columns: clamp(220px, calc(292px / var(--zoom)), 292px) minmax(0, 1fr);
+  gap: clamp(0.6rem, calc(1.05rem / var(--zoom)), 1.05rem);
 }
 
 .health-logs-side,
@@ -2095,8 +2095,11 @@ body.high-contrast .btn-secondary {
 
 /* Messages */
 .messages-layout {
-  grid-template-columns: 260px minmax(0, 1fr) 280px;
-  gap: 0.85rem;
+  grid-template-columns:
+    clamp(180px, calc(260px / var(--zoom)), 260px)
+    minmax(0, 1fr)
+    clamp(200px, calc(280px / var(--zoom)), 280px);
+  gap: clamp(0.5rem, calc(0.85rem / var(--zoom)), 0.85rem);
 }
 
 .messages-side {
@@ -2491,8 +2494,8 @@ body.high-contrast .sos-banner > p:last-child {
 
 /* Profile */
 .profile-content {
-  grid-template-columns: 290px minmax(0, 1fr);
-  gap: 0.9rem;
+  grid-template-columns: clamp(220px, calc(290px / var(--zoom)), 290px) minmax(0, 1fr);
+  gap: clamp(0.6rem, calc(0.9rem / var(--zoom)), 0.9rem);
 }
 
 .profile-side {
@@ -2552,7 +2555,7 @@ body.high-contrast .sos-banner > p:last-child {
 
 .profile-row-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(calc(260px * var(--zoom)), 1fr));
   gap: 0.6rem;
 }
 
@@ -2689,6 +2692,17 @@ body.high-contrast .sos-banner > p:last-child {
   background: #e7f2fb;
   color: #246ea8;
   font-weight: 700;
+}
+
+/* Stack dense two/three-column layouts when app zoom is above default */
+body.zoom-stacked-layout .health-logs-layout,
+body.zoom-stacked-layout .profile-content,
+body.zoom-stacked-layout .messages-layout {
+  grid-template-columns: 1fr;
+}
+
+body.zoom-stacked-layout .messages-context-panel {
+  grid-column: auto;
 }
 
 /* Responsive */

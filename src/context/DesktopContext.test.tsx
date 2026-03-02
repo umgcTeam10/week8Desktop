@@ -40,7 +40,9 @@ describe('DesktopContext', () => {
   it('toggle contrast and zoom buttons work', async () => {
     render(<TestApp />);
     await userEvent.click(screen.getByRole('button', { name: /toggle contrast/i }));
+    expect(document.body).toHaveClass('high-contrast');
     await userEvent.click(screen.getByRole('button', { name: /zoom 150/i }));
+    expect(document.body).toHaveClass('zoom-stacked-layout');
     expect(screen.getByTestId('screen')).toHaveTextContent('dashboard');
   });
 });

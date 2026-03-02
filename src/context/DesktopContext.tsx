@@ -41,6 +41,8 @@ export function DesktopProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     document.body.style.setProperty('zoom', String(zoom));
     document.documentElement.style.setProperty('--zoom', String(zoom));
+    if (zoom > 1) document.body.classList.add('zoom-stacked-layout');
+    else document.body.classList.remove('zoom-stacked-layout');
   }, [zoom]);
 
   useEffect(() => {

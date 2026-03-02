@@ -21,7 +21,7 @@ export function StatusBar() {
         : labels[screen] ?? screen;
 
   return (
-    <footer className="status-bar" role="contentinfo">
+    <footer className="status-bar" role="contentinfo" aria-live="polite" aria-atomic="true">
       <span>CareConnect Desktop — {statusText}</span>
     </footer>
   );

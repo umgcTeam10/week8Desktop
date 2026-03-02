@@ -43,9 +43,9 @@ export function ProfileScreen() {
           </section>
         </aside>
 
-        <main className="panel-main profile-main">
+        <section className="panel-main profile-main" aria-labelledby="profile-settings-heading">
           <header className="profile-header">
-            <h2>Settings</h2>
+            <h2 id="profile-settings-heading">Settings</h2>
             <input type="search" placeholder="Search settings (Ctrl+F)" aria-label="Search settings" className="search-input" />
           </header>
 
@@ -139,7 +139,7 @@ export function ProfileScreen() {
               </div>
             </div>
           </section>
-        </main>
+        </section>
       </div>
     </div>
   );

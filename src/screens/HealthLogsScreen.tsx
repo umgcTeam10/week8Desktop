@@ -71,9 +71,9 @@ export function HealthLogsScreen() {
           </section>
         </aside>
 
-        <main className="panel-main health-logs-main" id="recent-logs">
+        <section className="panel-main health-logs-main" id="recent-logs" aria-labelledby="recent-logs-heading">
           <header className="health-logs-toolbar">
-            <h2>Recent Logs</h2>
+            <h2 id="recent-logs-heading">Recent Logs</h2>
             <input type="search" placeholder="Search logs... (Ctrl+F)" aria-label="Search logs" className="search-input" />
             <button type="button" className="btn-primary" onClick={() => openModal('new-log')}>+ New Log</button>
             <button type="button" className="health-sort-btn">Sort by: Date</button>
@@ -82,7 +82,11 @@ export function HealthLogsScreen() {
           {error && <div className="error-banner" role="alert">{error}</div>}
 
           <section aria-label="Recent Logs">
-            <h3>Recent Logs <span className="tag tag-blue">{mockHealthLogs.length}</span></h3>
+            <h3>
+              Entries
+              {' '}
+              <span className="tag tag-blue">{mockHealthLogs.length}</span>
+            </h3>
             <ul className="health-log-list" aria-label="Recent health log entries">
               {mockHealthLogs.map((log) => (
                 <li key={log.id} className="list-item health-log-entry">
@@ -110,7 +114,7 @@ export function HealthLogsScreen() {
               ))}
             </ul>
           </section>
-        </main>
+        </section>
       </div>
     </div>
   );

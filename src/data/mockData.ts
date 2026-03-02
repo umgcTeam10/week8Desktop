@@ -32,6 +32,6 @@ export const mockMessages: Message[] = [
 ];
 
 export const mockCalendarEvents: CalendarEvent[] = [
-  { id: '1', title: 'Check-up', date: '2025-02-26', time: '10:00' },
-  { id: '2', title: 'Lab results', date: '2025-02-28', time: '14:00' },
+  { id: '1', title: 'Check-up', date: '2026-01-26', time: '10:00 AM' },
+  { id: '2', title: 'Lab results', date: '2026-01-27', time: '2:00 PM' },
 ];

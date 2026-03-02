@@ -118,7 +118,18 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: /profile & settings/i })).toBeInTheDocument();
   });
 
-  it('search input requires Enter to type and ArrowDown moves focus when not activated', async () => {
+  it('ArrowUp on text size slider keeps focus on the slider', async () => {
+    await renderAuthenticatedApp();
+    await userEvent.click(screen.getByRole('button', { name: /profile/i }));
+
+    const slider = screen.getByLabelText(/text size/i);
+    slider.focus();
+    await userEvent.keyboard('{ArrowUp}');
+
+    expect(slider).toHaveFocus();
+  });
+
+  it('search input allows direct typing and ArrowDown moves focus onward', async () => {
     await renderAuthenticatedApp();
     await userEvent.click(screen.getByRole('button', { name: /^messages$/i }));
 
@@ -126,15 +137,10 @@ describe('App', () => {
     searchInput.focus();
 
     await userEvent.keyboard('a');
-    expect(searchInput).toHaveValue('');
+    expect(searchInput).toHaveValue('a');
 
     await userEvent.keyboard('{ArrowDown}');
     expect(searchInput).not.toHaveFocus();
-
-    searchInput.focus();
-    await userEvent.keyboard('{Enter}');
-    await userEvent.keyboard('a');
-    expect(searchInput).toHaveValue('a');
   });
 
   it('ArrowDown moves focus out of email field on sign-in screen', async () => {
@@ -150,24 +156,18 @@ describe('App', () => {
     expect(passwordInput).toHaveFocus();
   });
 
-  it('ArrowRight in password field keeps caret movement until right edge', async () => {
+  it('ArrowRight in password field keeps focus in the field', async () => {
     render(<App />);
     await userEvent.click(screen.getByRole('radio', { name: /care recipient/i }));
     await userEvent.click(screen.getByRole('button', { name: /continue/i }));
 
     const passwordInput = screen.getByLabelText('Password *') as HTMLInputElement;
-    const showPasswordButton = screen.getByRole('button', { name: /show password/i });
-
     passwordInput.focus();
     await userEvent.type(passwordInput, 'abcd');
     passwordInput.setSelectionRange(2, 2);
 
     await userEvent.keyboard('{ArrowRight}');
     expect(passwordInput).toHaveFocus();
-
-    passwordInput.setSelectionRange(4, 4);
-    await userEvent.keyboard('{ArrowRight}');
-    expect(showPasswordButton).toHaveFocus();
   });
 
 });

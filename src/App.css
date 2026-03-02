@@ -1102,6 +1102,30 @@ body.high-contrast .app-page .segmented button.active {
   border-color: #fff;
 }
 
+body.high-contrast .calendar-day {
+  background: #000;
+  color: #fff;
+  border-color: #fff;
+}
+
+body.high-contrast .calendar-day.selected {
+  background: #ffff00;
+  color: #000;
+  border-color: #fff;
+}
+
+body.high-contrast .calendar-day.today {
+  box-shadow: inset 0 0 0 2px #fff;
+}
+
+body.high-contrast .calendar-event-dot {
+  background: #ffff00;
+}
+
+body.high-contrast .calendar-day.today .calendar-event-dot {
+  background: #000;
+}
+
 body.high-contrast .app-page .quick-contact-item strong {
   color: #fff;
 }
@@ -1817,38 +1841,63 @@ body.high-contrast .btn-secondary {
   color: #142b42;
 }
 
-.calendar-weekdays {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+.calendar-grid {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0.25rem;
+  table-layout: fixed;
+}
+
+.calendar-weekdays th {
   text-align: center;
   color: #647f96;
   font-weight: 600;
-  margin-bottom: 0.55rem;
+  padding: 0 0 0.35rem;
 }
 
-.calendar-days {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 0.25rem;
+.calendar-days td {
+  padding: 0;
+  vertical-align: top;
 }
 
 .calendar-day {
+  width: 100%;
   min-height: 66px;
+  border: 1px solid transparent;
+  border-radius: 12px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   position: relative;
   color: #415c74;
+  background: #f5f8fb;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.calendar-day:hover {
+  border-color: #b8d4e8;
+}
+
+.calendar-day.selected {
+  border-color: #143a67;
+  background: #e7f0f8;
+  color: #143a67;
 }
 
 .calendar-day.today {
-  width: 52px;
-  height: 52px;
-  border-radius: 999px;
-  margin: auto;
   background: #143a67;
   color: #fff;
-  font-weight: 700;
+}
+
+.calendar-day-number {
+  line-height: 1;
+}
+
+.calendar-day.empty {
+  min-height: 66px;
+  display: block;
+  background: transparent;
 }
 
 .calendar-event-dot {
@@ -1858,6 +1907,10 @@ body.high-contrast .btn-secondary {
   background: #167dc1;
   position: absolute;
   bottom: 8px;
+}
+
+.calendar-day.today .calendar-event-dot {
+  background: #fff;
 }
 
 .calendar-schedule {
@@ -1882,6 +1935,11 @@ body.high-contrast .btn-secondary {
 
 .calendar-schedule-card p {
   margin: 0.3rem 0 0;
+  color: #5d7993;
+}
+
+.calendar-schedule-empty {
+  padding: 0.9rem 1rem;
   color: #5d7993;
 }
 

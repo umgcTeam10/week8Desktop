@@ -2,17 +2,192 @@ import React from 'react';
 import { mockCalendarEvents } from '../data/mockData';
 import { PersistentNowBar } from '../components/PersistentNowBar';
 
+const WEEKDAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const REFERENCE_DATE = new Date(2026, 0, 26);
+
+function normalizeDate(date: Date): Date {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function startOfMonth(date: Date): Date {
+  return new Date(date.getFullYear(), date.getMonth(), 1);
+}
+
+function toDateKey(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function buildCalendarRows(month: Date): Array<Array<Date | null>> {
+  const year = month.getFullYear();
+  const monthIndex = month.getMonth();
+  const firstDayOfMonth = new Date(year, monthIndex, 1);
+  const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+  const leadingEmptyCells = firstDayOfMonth.getDay();
+
+  const cells: Array<Date | null> = Array.from({ length: leadingEmptyCells }, () => null);
+  for (let day = 1; day <= daysInMonth; day += 1) {
+    cells.push(new Date(year, monthIndex, day));
+  }
+  while (cells.length % 7 !== 0) {
+    cells.push(null);
+  }
+
+  const rows: Array<Array<Date | null>> = [];
+  for (let i = 0; i < cells.length; i += 7) rows.push(cells.slice(i, i + 7));
+  return rows;
+}
+
+function shiftMonthClamped(date: Date, deltaMonths: number): Date {
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const day = date.getDate();
+  const targetMonthDate = new Date(year, month + deltaMonths, 1);
+  const lastDayInTargetMonth = new Date(
+    targetMonthDate.getFullYear(),
+    targetMonthDate.getMonth() + 1,
+    0
+  ).getDate();
+  return new Date(
+    targetMonthDate.getFullYear(),
+    targetMonthDate.getMonth(),
+    Math.min(day, lastDayInTargetMonth)
+  );
+}
+
 /**
- * Design 2.8 Calendar: month view, today highlighted, Today's Schedule.
+ * Design 2.8 Calendar: interactive month view with keyboard and per-day schedule.
  */
 export function CalendarScreen() {
-  const days = [
-    ['', '', '', '', '1', '2', '3'],
-    ['4', '5', '6', '7', '8', '9', '10'],
-    ['11', '12', '13', '14', '15', '16', '17'],
-    ['18', '19', '20', '21', '22', '23', '24'],
-    ['25', '26', '27', '28', '29', '30', '31'],
-  ];
+  const monthFormatter = React.useMemo(
+    () => new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }),
+    []
+  );
+  const longDateFormatter = React.useMemo(
+    () =>
+      new Intl.DateTimeFormat('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+      }),
+    []
+  );
+  const shortDateFormatter = React.useMemo(
+    () => new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'short', day: 'numeric' }),
+    []
+  );
+
+  const [selectedDate, setSelectedDate] = React.useState<Date>(() => normalizeDate(REFERENCE_DATE));
+  const [visibleMonth, setVisibleMonth] = React.useState<Date>(() => startOfMonth(REFERENCE_DATE));
+
+  const dayButtonRefs = React.useRef<Record<string, HTMLButtonElement | null>>({});
+  const focusDateKeyRef = React.useRef<string | null>(null);
+
+  const eventsByDate = React.useMemo(() => {
+    const map = new Map<string, typeof mockCalendarEvents>();
+    mockCalendarEvents.forEach((event) => {
+      const existing = map.get(event.date);
+      if (existing) existing.push(event);
+      else map.set(event.date, [event]);
+    });
+    return map;
+  }, []);
+
+  const selectedDateKey = React.useMemo(() => toDateKey(selectedDate), [selectedDate]);
+  const monthRows = React.useMemo(() => buildCalendarRows(visibleMonth), [visibleMonth]);
+  const monthLabel = React.useMemo(() => monthFormatter.format(visibleMonth), [monthFormatter, visibleMonth]);
+  const selectedDateLabel = React.useMemo(
+    () => longDateFormatter.format(selectedDate),
+    [longDateFormatter, selectedDate]
+  );
+  const selectedDateSubtitle = React.useMemo(
+    () => shortDateFormatter.format(selectedDate),
+    [selectedDate, shortDateFormatter]
+  );
+  const eventsForSelectedDate = eventsByDate.get(selectedDateKey) ?? [];
+
+  const applySelection = React.useCallback(
+    (nextDate: Date, focusButton: boolean) => {
+      const normalized = normalizeDate(nextDate);
+      const key = toDateKey(normalized);
+      if (focusButton) focusDateKeyRef.current = key;
+      setSelectedDate(normalized);
+      setVisibleMonth(startOfMonth(normalized));
+    },
+    []
+  );
+
+  const moveByDays = React.useCallback(
+    (baseDate: Date, deltaDays: number, focusButton = true) => {
+      const next = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate() + deltaDays);
+      applySelection(next, focusButton);
+    },
+    [applySelection]
+  );
+
+  const moveByMonths = React.useCallback(
+    (baseDate: Date, deltaMonths: number, focusButton = true) => {
+      const next = shiftMonthClamped(baseDate, deltaMonths);
+      applySelection(next, focusButton);
+    },
+    [applySelection]
+  );
+
+  React.useEffect(() => {
+    if (!focusDateKeyRef.current) return;
+    const target = dayButtonRefs.current[focusDateKeyRef.current];
+    if (target) {
+      target.focus();
+      focusDateKeyRef.current = null;
+    }
+  }, [selectedDate, visibleMonth]);
+
+  const handleDayKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, day: Date) => {
+    switch (event.key) {
+      case 'ArrowLeft':
+        event.preventDefault();
+        moveByDays(day, -1);
+        return;
+      case 'ArrowRight':
+        event.preventDefault();
+        moveByDays(day, 1);
+        return;
+      case 'ArrowUp':
+        event.preventDefault();
+        moveByDays(day, -7);
+        return;
+      case 'ArrowDown':
+        event.preventDefault();
+        moveByDays(day, 7);
+        return;
+      case 'Home':
+        event.preventDefault();
+        moveByDays(day, -day.getDay());
+        return;
+      case 'End':
+        event.preventDefault();
+        moveByDays(day, 6 - day.getDay());
+        return;
+      case 'PageUp':
+        event.preventDefault();
+        moveByMonths(day, -1);
+        return;
+      case 'PageDown':
+        event.preventDefault();
+        moveByMonths(day, 1);
+        return;
+      case 'Enter':
+      case ' ':
+        event.preventDefault();
+        applySelection(day, true);
+        return;
+      default:
+        return;
+    }
+  };
 
   return (
     <div className="app-page calendar-page">
@@ -28,47 +203,100 @@ export function CalendarScreen() {
         <p>View your schedule and upcoming appointments</p>
       </section>
 
-      <section className="calendar-shell app-surface-card" role="grid" aria-label="January 2026 calendar">
+      <section className="calendar-shell app-surface-card" aria-label={`${monthLabel} calendar`}>
         <div className="calendar-month-nav">
-          <button type="button" aria-label="Previous month">←</button>
-          <span>January 2026</span>
-          <button type="button" aria-label="Next month">→</button>
+          <button
+            type="button"
+            aria-label={`Previous month, ${monthFormatter.format(new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() - 1, 1))}`}
+            onClick={() => moveByMonths(selectedDate, -1, true)}
+          >
+            ←
+          </button>
+          <span aria-live="polite" aria-atomic="true">{monthLabel}</span>
+          <button
+            type="button"
+            aria-label={`Next month, ${monthFormatter.format(new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1, 1))}`}
+            onClick={() => moveByMonths(selectedDate, 1, true)}
+          >
+            →
+          </button>
         </div>
-        <div className="calendar-weekdays">
-          <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
-        </div>
-        <div className="calendar-days">
-          {days.flatMap((week, weekIndex) =>
-            week.map((day, dayIndex) => {
-              if (!day) {
-                return <span key={`empty-${weekIndex}-${dayIndex}`} className="calendar-day empty" aria-hidden="true" />;
-              }
-              const isToday = day === '26';
-              const hasDot = day === '27';
-              return (
-                <span key={`${weekIndex}-${day}`} className={`calendar-day ${isToday ? 'today' : ''}`}>
-                  {day}
-                  {hasDot && <span className="calendar-event-dot" aria-hidden="true" />}
-                </span>
-              );
-            })
-          )}
-        </div>
+
+        <table className="calendar-grid">
+          <thead className="calendar-weekdays">
+            <tr>
+              {WEEKDAY_LABELS.map((weekday) => (
+                <th key={weekday} scope="col">{weekday}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="calendar-days">
+            {monthRows.map((week, weekIndex) => (
+              <tr key={`week-${weekIndex}`}>
+                {week.map((day, dayIndex) => {
+                  if (!day) {
+                    return (
+                      <td key={`empty-${weekIndex}-${dayIndex}`}>
+                        <span className="calendar-day empty" aria-hidden="true" />
+                      </td>
+                    );
+                  }
+
+                  const dayKey = toDateKey(day);
+                  const dayEvents = eventsByDate.get(dayKey) ?? [];
+                  const isSelected = dayKey === selectedDateKey;
+                  const isReferenceDay = dayKey === toDateKey(REFERENCE_DATE);
+                  const dayLabel = longDateFormatter.format(day);
+                  const todayMessage = isReferenceDay ? 'Today. ' : '';
+                  const eventMessage =
+                    dayEvents.length === 0
+                      ? 'No appointments'
+                      : `${dayEvents.length} appointment${dayEvents.length === 1 ? '' : 's'}`;
+                  const selectedMessage = isSelected ? ' Selected.' : '';
+
+                  return (
+                    <td key={dayKey}>
+                      <button
+                        type="button"
+                        ref={(el) => {
+                          dayButtonRefs.current[dayKey] = el;
+                        }}
+                        className={`calendar-day ${isReferenceDay ? 'today' : ''} ${isSelected ? 'selected' : ''} ${dayEvents.length > 0 ? 'has-event' : ''}`}
+                        onClick={() => applySelection(day, false)}
+                        onKeyDown={(event) => handleDayKeyDown(event, day)}
+                        tabIndex={isSelected ? 0 : -1}
+                        aria-label={`${dayLabel}. ${todayMessage}${eventMessage}.${selectedMessage}`}
+                        aria-current={isSelected ? 'date' : undefined}
+                      >
+                        <span className="calendar-day-number">{day.getDate()}</span>
+                        {dayEvents.length > 0 && <span className="calendar-event-dot" aria-hidden="true" />}
+                      </button>
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </section>
 
       <section aria-labelledby="today-schedule-heading" className="calendar-schedule">
-        <h3 id="today-schedule-heading">Today&apos;s Schedule</h3>
-        <p className="panel-subtitle">Monday, Jan 26</p>
-        <ul aria-label="Today's appointments" className="calendar-schedule-list">
-          {mockCalendarEvents.map((ev) => (
-            <li key={ev.id} className="list-item calendar-schedule-card">
-              <div>
-                <strong>{ev.title}</strong>
-                <p>{ev.time}</p>
-              </div>
-              <span className="tag">high</span>
-            </li>
-          ))}
+        <h3 id="today-schedule-heading">Schedule for {selectedDateLabel}</h3>
+        <p className="panel-subtitle">{selectedDateSubtitle}</p>
+        <ul aria-label={`Appointments for ${selectedDateLabel}`} className="calendar-schedule-list">
+          {eventsForSelectedDate.length === 0 ? (
+            <li className="list-item calendar-schedule-empty">No appointments scheduled.</li>
+          ) : (
+            eventsForSelectedDate.map((event) => (
+              <li key={event.id} className="list-item calendar-schedule-card">
+                <div>
+                  <strong>{event.title}</strong>
+                  <p>{event.time}</p>
+                </div>
+                <span className="tag">scheduled</span>
+              </li>
+            ))
+          )}
         </ul>
       </section>
     </div>

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { DesktopProvider, useDesktop } from './context/DesktopContext';
 import { Toolbar } from './components/Toolbar';
 import { StatusBar } from './components/StatusBar';
@@ -29,7 +29,7 @@ const FOCUSABLE_SELECTOR = [
 function isTypingElement(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
   if (target.isContentEditable) return true;
-  if (target.tagName === 'TEXTAREA' || target.tagName === 'SELECT') return true;
+  if (target.tagName === 'SELECT') return true;
   if (target.tagName !== 'INPUT') return false;
 
   const type = (target as HTMLInputElement).type.toLowerCase();
@@ -38,41 +38,35 @@ function isTypingElement(target: EventTarget | null): boolean {
     'search',
     'email',
     'password',
-    'number',
     'tel',
     'url',
+  ]);
+  return textEntryTypes.has(type);
+}
+
+function isTextEntryControl(
+  target: EventTarget | null
+): target is HTMLInputElement {
+  if (!(target instanceof HTMLInputElement)) return false;
+  return isTypingElement(target);
+}
+
+function usesNativeArrowBehavior(target: EventTarget | null): boolean {
+  if (target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement) return true;
+  if (!(target instanceof HTMLInputElement)) return false;
+
+  const type = target.type.toLowerCase();
+  const nativeArrowTypes = new Set([
+    'number',
+    'range',
     'date',
     'datetime-local',
     'month',
     'time',
     'week',
+    'radio',
   ]);
-  return textEntryTypes.has(type);
-}
-
-function isSearchInput(target: EventTarget | null): target is HTMLInputElement {
-  return target instanceof HTMLInputElement && target.type.toLowerCase() === 'search';
-}
-
-function isTextEntryControl(
-  target: EventTarget | null
-): target is HTMLInputElement | HTMLTextAreaElement {
-  if (target instanceof HTMLTextAreaElement) return true;
-  if (!(target instanceof HTMLInputElement)) return false;
-  return isTypingElement(target);
-}
-
-function isAtHorizontalEdge(
-  el: HTMLInputElement | HTMLTextAreaElement,
-  key: 'ArrowLeft' | 'ArrowRight'
-): boolean {
-  const start = el.selectionStart;
-  const end = el.selectionEnd;
-  if (start === null || end === null) return false;
-
-  if (key === 'ArrowLeft') return start === 0 && end === 0;
-  const valueLength = el.value.length;
-  return start === valueLength && end === valueLength;
+  return nativeArrowTypes.has(type);
 }
 
 function getFocusableElements(): HTMLElement[] {
@@ -84,7 +78,6 @@ function getFocusableElements(): HTMLElement[] {
 
 function AppContent() {
   const { authPhase, screen, setScreen, modal, closeModal, openModal } = useDesktop();
-  const activeSearchInputRef = useRef<HTMLInputElement | null>(null);
 
   const moveFocusSequential = useCallback((delta: number) => {
     const focusable = getFocusableElements();
@@ -100,48 +93,28 @@ function AppContent() {
     focusable[nextIndex]?.focus();
   }, []);
 
-  const focusBoundary = useCallback((position: 'start' | 'end') => {
-    const focusable = getFocusableElements();
-    if (focusable.length === 0) return;
-    if (position === 'start') focusable[0]?.focus();
-    else focusable[focusable.length - 1]?.focus();
-  }, []);
-
   const handleDirectionalKeys = useCallback(
     (e: KeyboardEvent): boolean => {
       if (e.ctrlKey || e.metaKey || e.altKey) return false;
       switch (e.key) {
         case 'ArrowDown':
-        case 'ArrowRight':
           moveFocusSequential(1);
           e.preventDefault();
           return true;
         case 'ArrowUp':
-        case 'ArrowLeft':
           moveFocusSequential(-1);
-          e.preventDefault();
-          return true;
-        case 'Home':
-          focusBoundary('start');
-          e.preventDefault();
-          return true;
-        case 'End':
-          focusBoundary('end');
           e.preventDefault();
           return true;
         default:
           return false;
       }
     },
-    [moveFocusSequential, focusBoundary]
+    [moveFocusSequential]
   );
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.defaultPrevented) return;
-      if (activeSearchInputRef.current && document.activeElement !== activeSearchInputRef.current) {
-        activeSearchInputRef.current = null;
-      }
       if (modal) {
         if (e.key === 'Escape') {
           closeModal();
@@ -151,47 +124,16 @@ function AppContent() {
       }
 
       if (isTextEntryControl(e.target)) {
-        const textEntry = e.target;
-        const searchEditing = isSearchInput(textEntry) && activeSearchInputRef.current === textEntry;
-
-        if (!e.ctrlKey && !e.metaKey && !e.altKey && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
-          if (isAtHorizontalEdge(textEntry, e.key)) {
-            moveFocusSequential(e.key === 'ArrowLeft' ? -1 : 1);
-            e.preventDefault();
-          }
-          return;
-        }
-
         if (!e.ctrlKey && !e.metaKey && !e.altKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
           moveFocusSequential(e.key === 'ArrowUp' ? -1 : 1);
           e.preventDefault();
           return;
         }
 
-        if (isSearchInput(textEntry) && !searchEditing) {
-          if (e.key === 'Enter' || e.key === ' ') {
-            activeSearchInputRef.current = textEntry;
-            e.preventDefault();
-            return;
-          }
-          if (!e.ctrlKey && !e.metaKey && !e.altKey && (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Delete')) {
-            e.preventDefault();
-            return;
-          }
-          return;
-        }
-
-        if (isSearchInput(textEntry) && searchEditing) {
-          if (e.key === 'Escape') {
-            activeSearchInputRef.current = null;
-            textEntry.blur();
-            e.preventDefault();
-          }
-          return;
-        }
-
         return;
       }
+
+      if (usesNativeArrowBehavior(e.target)) return;
 
       if (!isTypingElement(e.target) && handleDirectionalKeys(e)) {
         return;

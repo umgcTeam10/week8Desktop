@@ -44,30 +44,27 @@ describe('Accessibility', () => {
     expect(skip).toHaveFocus();
   });
 
-  it('ArrowRight and ArrowLeft move focus sequentially', async () => {
+  it('ArrowRight and ArrowLeft keep native behavior (not remapped globally)', async () => {
     render(<App />);
     const highContrastToggle = screen.getByRole('button', { name: /toggle high contrast/i });
-    const shortcutsButton = screen.getByRole('button', { name: /open keyboard shortcuts/i });
 
     highContrastToggle.focus();
     await userEvent.keyboard('{ArrowRight}');
-    expect(shortcutsButton).toHaveFocus();
+    expect(highContrastToggle).toHaveFocus();
 
     await userEvent.keyboard('{ArrowLeft}');
     expect(highContrastToggle).toHaveFocus();
   });
 
-  it('Home and End jump to first and last focusable controls', async () => {
+  it('Home and End keep native behavior (not remapped globally)', async () => {
     render(<App />);
-    const skip = screen.getByRole('link', { name: /skip to main content/i });
     const highContrastToggle = screen.getByRole('button', { name: /toggle high contrast/i });
-    const roleHelpButton = screen.getByRole('button', { name: /not sure which one/i });
 
     highContrastToggle.focus();
     await userEvent.keyboard('{End}');
-    expect(roleHelpButton).toHaveFocus();
+    expect(highContrastToggle).toHaveFocus();
 
     await userEvent.keyboard('{Home}');
-    expect(skip).toHaveFocus();
+    expect(highContrastToggle).toHaveFocus();
   });
 });

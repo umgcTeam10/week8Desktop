@@ -851,7 +851,15 @@ body.high-contrast .panel-welcome {
   font-weight: 700;
 }
 body.high-contrast .error-summary { background: #000; border-color: #ffff00; color: #ffff00; }
-body.high-contrast .layout-auth { border-color: var(--color-border); }
+body.high-contrast .layout-auth {
+  border-color: var(--color-border);
+  background: #000;
+}
+body.high-contrast .panel-auth,
+body.high-contrast .panel-main {
+  background: #000;
+  color: #fff;
+}
 body.high-contrast .step-indicator,
 body.high-contrast .keyboard-tip,
 body.high-contrast .role-card,
@@ -862,6 +870,32 @@ body.high-contrast .separator::after {
   background: #000;
   color: #fff;
   border-color: var(--color-border);
+}
+body.high-contrast .role-card {
+  position: relative;
+}
+body.high-contrast .role-card-selected {
+  background: #111;
+  border-color: #ffff00;
+  box-shadow: 0 0 0 2px #ffff00;
+}
+body.high-contrast .role-card-selected::after {
+  content: "Selected";
+  position: absolute;
+  top: 0.55rem;
+  right: 0.75rem;
+  background: #ffff00;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 999px;
+  padding: 0.15rem 0.48rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+body.high-contrast .role-card-selected .role-card-icon {
+  background: #ffff00;
+  border: 1px solid #000;
+  color: #000;
 }
 body.high-contrast .step-indicator-dot { background: var(--color-primary); color: #000; }
 body.high-contrast .panel-welcome-title,
@@ -900,6 +934,209 @@ body.high-contrast .error-summary-intro,
 body.high-contrast .error-summary-outro,
 body.high-contrast .form-error-with-icon {
   color: #cccccc;
+}
+body.high-contrast .sign-in-form .form-group label,
+body.high-contrast .sign-in-form .checkbox-label {
+  color: #fff;
+}
+body.high-contrast .sign-in-form .input-leading-icon,
+body.high-contrast .sign-in-form .input-trailing-icon,
+body.high-contrast .sign-in-form .input-icon-button {
+  color: #fff;
+}
+body.high-contrast .sign-in-form input::placeholder {
+  color: #bfbfbf;
+  opacity: 1;
+}
+body.high-contrast .sign-in-form .link {
+  color: #ffff00;
+}
+body.high-contrast .sign-in-form .checkbox-label input[type='checkbox'] {
+  accent-color: #ffff00;
+}
+
+/* High contrast overrides for authenticated workspace */
+body.high-contrast .app-authenticated,
+body.high-contrast .app-authenticated .app-main {
+  background: #000;
+  color: #fff;
+}
+
+body.high-contrast .app-authenticated * {
+  border-color: #fff;
+}
+
+body.high-contrast .app-page-topbar h2,
+body.high-contrast .app-page-topbar p,
+body.high-contrast .app-page-user,
+body.high-contrast .dashboard-heading h3,
+body.high-contrast .dashboard-heading p {
+  color: #fff;
+}
+
+body.high-contrast .app-now-banner,
+body.high-contrast .app-now-banner-action {
+  background: #000;
+  border: 1px solid #fff;
+  box-shadow: none;
+  color: #fff;
+}
+
+body.high-contrast .app-now-banner-item,
+body.high-contrast .app-now-banner-sep {
+  color: #ddd;
+}
+
+body.high-contrast .app-sidebar {
+  background: #000;
+  color: #fff;
+  border-right: 1px solid #fff;
+}
+
+body.high-contrast .app-sidebar-brand,
+body.high-contrast .app-sidebar-user-meta span,
+body.high-contrast .app-sidebar-nav button {
+  color: #fff;
+}
+
+body.high-contrast .app-sidebar-nav button:hover {
+  background: #1a1a1a;
+}
+
+body.high-contrast .app-sidebar-nav button.active {
+  background: #ffff00;
+  color: #000;
+}
+
+body.high-contrast .app-sidebar-nav button.active .app-sidebar-nav-icon,
+body.high-contrast .app-sidebar-nav button.active .app-sidebar-nav-dot {
+  background: #000;
+}
+
+body.high-contrast .app-sidebar-nav button.active .app-sidebar-nav-icon-svg,
+body.high-contrast .app-sidebar-nav button.active .app-sidebar-nav-label {
+  color: #ffff00;
+}
+
+body.high-contrast .app-sidebar-nav button.active .app-sidebar-nav-label {
+  color: #000;
+}
+
+body.high-contrast .app-page,
+body.high-contrast .app-page * {
+  color: #fff;
+  border-color: #fff;
+}
+
+body.high-contrast .app-page :is(
+  div,
+  section,
+  article,
+  aside,
+  header,
+  footer,
+  nav,
+  main,
+  ul,
+  li,
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  span,
+  strong,
+  small,
+  label,
+  input,
+  select,
+  textarea,
+  table,
+  thead,
+  tbody,
+  tr,
+  td,
+  th,
+  form
+) {
+  background: #000;
+}
+
+body.high-contrast .app-page a {
+  color: #ffff00;
+}
+
+body.high-contrast .app-page ::placeholder {
+  color: #dddddd;
+}
+
+body.high-contrast .app-page .quick-contact,
+body.high-contrast .app-page .messages-header-actions button,
+body.high-contrast .app-page .messages-input-icon,
+body.high-contrast .app-page .quick-replies button,
+body.high-contrast .app-page .tasks-filter-btn,
+body.high-contrast .app-page .health-sort-btn,
+body.high-contrast .app-page .segmented button {
+  background: #000;
+  color: #fff;
+  border: 1px solid #fff;
+}
+
+body.high-contrast .app-page .segmented button.active {
+  background: #ffff00;
+  color: #000;
+  border-color: #fff;
+}
+
+body.high-contrast .app-page .quick-contact-item strong {
+  color: #fff;
+}
+
+body.high-contrast .app-page .quick-contact-item small {
+  color: #ddd;
+}
+
+body.high-contrast .app-surface-card,
+body.high-contrast .dashboard-card,
+body.high-contrast .task-item-card,
+body.high-contrast .calendar-shell,
+body.high-contrast .calendar-schedule-card,
+body.high-contrast .health-log-entry,
+body.high-contrast .messages-thread-list .list-item,
+body.high-contrast .profile-setting-row,
+body.high-contrast .tasks-now-card,
+body.high-contrast .health-summary-card,
+body.high-contrast .reminder-card,
+body.high-contrast .sos-banner {
+  background: #000;
+  border-color: #fff;
+  box-shadow: none;
+  color: #fff;
+}
+
+body.high-contrast .app-page input,
+body.high-contrast .app-page select,
+body.high-contrast .app-page textarea,
+body.high-contrast .app-page .search-input {
+  background: #000;
+  color: #fff;
+  border-color: #fff;
+}
+
+body.high-contrast .tag,
+body.high-contrast .tag-blue {
+  background: #000;
+  color: #fff;
+  border-color: #fff;
+}
+
+body.high-contrast .btn-primary,
+body.high-contrast .btn-secondary {
+  background: #000;
+  color: #fff;
+  border: 1px solid #fff;
 }
 
 @media (max-width: 980px) {
@@ -1103,7 +1340,7 @@ body.high-contrast .form-error-with-icon {
 
 /* Sidebar */
 .app-sidebar {
-  width: 270px;
+  width: clamp(180px, calc(270px / var(--zoom)), 270px);
   background: #113760;
   color: #e6f0f8;
   padding: 1.1rem 0.85rem 0.9rem;
@@ -2127,6 +2364,31 @@ body.high-contrast .form-error-with-icon {
   font-size: 0.86rem;
 }
 
+body.high-contrast .sos-banner {
+  background: #000;
+  border: 2px solid #fff;
+}
+
+body.high-contrast .sos-banner-label {
+  color: #fff;
+}
+
+body.high-contrast .btn-sos {
+  background: #ffff00;
+  color: #000;
+  border: 2px solid #fff;
+}
+
+body.high-contrast .app-page .sos-banner .btn-sos {
+  background: #ffff00;
+  color: #000;
+  border: 2px solid #fff;
+}
+
+body.high-contrast .sos-banner > p:last-child {
+  color: #fff;
+}
+
 .reminder-card {
   padding: 0.85rem;
   background: #fff8ed;
@@ -2448,7 +2710,7 @@ body.high-contrast .form-error-with-icon {
 
 @media (max-width: 980px) {
   .app-sidebar {
-    width: 220px;
+    width: clamp(160px, calc(220px / var(--zoom)), 220px);
   }
 
   .app-page-topbar {

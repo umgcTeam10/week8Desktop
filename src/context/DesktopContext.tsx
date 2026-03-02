@@ -57,11 +57,19 @@ export function DesktopProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (typeof window === 'undefined' || !window.electronAPI) return;
-    window.electronAPI.onMenuZoomIn(zoomIn);
-    window.electronAPI.onMenuZoomOut(zoomOut);
-    window.electronAPI.onMenuZoomReset(zoomReset);
-    window.electronAPI.onMenuToggleHighContrast(() => setHighContrast((h) => !h));
-    window.electronAPI.onMenuKeyboardShortcuts(() => openModal('keyboard-shortcuts'));
+    const unsubscribers = [
+      window.electronAPI.onMenuZoomIn(zoomIn),
+      window.electronAPI.onMenuZoomOut(zoomOut),
+      window.electronAPI.onMenuZoomReset(zoomReset),
+      window.electronAPI.onMenuToggleHighContrast(() => setHighContrast((h) => !h)),
+      window.electronAPI.onMenuKeyboardShortcuts(() => openModal('keyboard-shortcuts')),
+    ];
+
+    return () => {
+      unsubscribers.forEach((unsubscribe) => {
+        if (typeof unsubscribe === 'function') unsubscribe();
+      });
+    };
   }, [zoomIn, zoomOut, zoomReset, openModal]);
 
   const value: DesktopState = {

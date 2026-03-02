@@ -4,6 +4,7 @@ import { KeyboardIcon } from './AuthIcons';
 
 const isMac = typeof navigator !== 'undefined' && navigator.platform.toUpperCase().indexOf('MAC') >= 0;
 const mod = isMac ? 'Cmd' : 'Ctrl';
+const altKey = isMac ? 'Option' : 'Alt';
 
 /**
  * Design 2.5: Keyboard Shortcuts modal — Form Navigation + Actions.
@@ -11,8 +12,8 @@ const mod = isMac ? 'Cmd' : 'Ctrl';
 const formNavShortcuts = [
   { keys: 'Tab', action: 'Move to next field or button' },
   { keys: 'Shift + Tab', action: 'Move to previous field or button' },
-  { keys: 'Alt + E', action: 'Focus Email field' },
-  { keys: 'Alt + P', action: 'Focus Password field' },
+  { keys: `${altKey} + E`, action: 'Focus Email field' },
+  { keys: `${altKey} + P`, action: 'Focus Password field' },
 ];
 
 const actionShortcuts = [

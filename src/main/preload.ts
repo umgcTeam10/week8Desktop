@@ -1,11 +1,17 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
+function registerMenuListener(channel: string, cb: () => void): () => void {
+  const listener = () => cb();
+  ipcRenderer.on(channel, listener);
+  return () => ipcRenderer.removeListener(channel, listener);
+}
+
 contextBridge.exposeInMainWorld('electronAPI', {
-  onMenuZoomIn: (cb: () => void) => ipcRenderer.on('menu-zoom-in', () => cb()),
-  onMenuZoomOut: (cb: () => void) => ipcRenderer.on('menu-zoom-out', () => cb()),
-  onMenuZoomReset: (cb: () => void) => ipcRenderer.on('menu-zoom-reset', () => cb()),
+  onMenuZoomIn: (cb: () => void) => registerMenuListener('menu-zoom-in', cb),
+  onMenuZoomOut: (cb: () => void) => registerMenuListener('menu-zoom-out', cb),
+  onMenuZoomReset: (cb: () => void) => registerMenuListener('menu-zoom-reset', cb),
   onMenuToggleHighContrast: (cb: () => void) =>
-    ipcRenderer.on('menu-toggle-high-contrast', () => cb()),
+    registerMenuListener('menu-toggle-high-contrast', cb),
   onMenuKeyboardShortcuts: (cb: () => void) =>
-    ipcRenderer.on('menu-keyboard-shortcuts', () => cb()),
+    registerMenuListener('menu-keyboard-shortcuts', cb),
 });

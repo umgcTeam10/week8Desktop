@@ -15,6 +15,10 @@ describe('Toolbar', () => {
     const btn = screen.getByRole('button', { name: /toggle high contrast/i });
     await userEvent.click(btn);
     expect(btn).toHaveTextContent('High contrast on');
+    expect(document.body).toHaveClass('high-contrast');
+    await userEvent.click(btn);
+    expect(btn).toHaveTextContent('High contrast off');
+    expect(document.body).not.toHaveClass('high-contrast');
   });
 
   it('zoom in increases zoom display', async () => {

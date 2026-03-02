@@ -63,6 +63,23 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: 'Calendar' })).toBeInTheDocument();
   });
 
+  it('navigates to Tasks from sidebar after sign in', async () => {
+    await renderAuthenticatedApp();
+    await userEvent.click(screen.getByRole('button', { name: /tasks/i }));
+    expect(screen.getByRole('heading', { name: /^tasks$/i })).toBeInTheDocument();
+  });
+
+  it('ArrowDown then Enter on role selection moves to sign-in', async () => {
+    render(<App />);
+    const caregiverRadio = screen.getByRole('radio', { name: /caregiver/i });
+    caregiverRadio.focus();
+    await userEvent.keyboard('{ArrowDown}');
+    expect(screen.getByRole('radio', { name: /care recipient/i })).toBeChecked();
+
+    await userEvent.keyboard('{Enter}');
+    expect(screen.getByRole('heading', { name: /sign in to your account/i })).toBeInTheDocument();
+  });
+
   it('navigates to Profile from sidebar after sign in', async () => {
     await renderAuthenticatedApp();
     await userEvent.click(screen.getByRole('button', { name: /profile/i }));

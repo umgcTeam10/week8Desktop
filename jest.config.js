@@ -3,7 +3,6 @@ module.exports = {
   testEnvironment: 'jsdom',
   roots: ['<rootDir>/src'],
   testMatch: ['**/__tests__/**/*.test.(ts|tsx)', '**/*.test.(ts|tsx)'],
-  modulePathIgnorePatterns: ['<rootDir>/src/main'],
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',
   },

@@ -30,4 +30,44 @@ describe('Accessibility', () => {
     render(<App />);
     expect(screen.getByRole('contentinfo')).toBeInTheDocument();
   });
+
+  it('ArrowDown and ArrowUp move focus between controls', async () => {
+    render(<App />);
+    const skip = screen.getByRole('link', { name: /skip to main content/i });
+    const highContrastToggle = screen.getByRole('button', { name: /toggle high contrast/i });
+
+    skip.focus();
+    await userEvent.keyboard('{ArrowDown}');
+    expect(highContrastToggle).toHaveFocus();
+
+    await userEvent.keyboard('{ArrowUp}');
+    expect(skip).toHaveFocus();
+  });
+
+  it('ArrowRight and ArrowLeft move focus sequentially', async () => {
+    render(<App />);
+    const highContrastToggle = screen.getByRole('button', { name: /toggle high contrast/i });
+    const shortcutsButton = screen.getByRole('button', { name: /open keyboard shortcuts/i });
+
+    highContrastToggle.focus();
+    await userEvent.keyboard('{ArrowRight}');
+    expect(shortcutsButton).toHaveFocus();
+
+    await userEvent.keyboard('{ArrowLeft}');
+    expect(highContrastToggle).toHaveFocus();
+  });
+
+  it('Home and End jump to first and last focusable controls', async () => {
+    render(<App />);
+    const skip = screen.getByRole('link', { name: /skip to main content/i });
+    const highContrastToggle = screen.getByRole('button', { name: /toggle high contrast/i });
+    const roleHelpButton = screen.getByRole('button', { name: /not sure which one/i });
+
+    highContrastToggle.focus();
+    await userEvent.keyboard('{End}');
+    expect(roleHelpButton).toHaveFocus();
+
+    await userEvent.keyboard('{Home}');
+    expect(skip).toHaveFocus();
+  });
 });

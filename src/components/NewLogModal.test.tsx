@@ -59,8 +59,10 @@ describe('NewLogModal', () => {
 
   it('Cancel closes modal', async () => {
     renderWithProvider();
-    await userEvent.click(screen.getByRole('button', { name: /open new log/i }));
+    const openButton = screen.getByRole('button', { name: /open new log/i });
+    await userEvent.click(openButton);
     await userEvent.click(screen.getByRole('button', { name: /cancel/i }));
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(openButton).toHaveFocus();
   });
 });

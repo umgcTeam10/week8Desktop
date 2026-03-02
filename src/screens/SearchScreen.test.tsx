@@ -13,7 +13,10 @@ describe('SearchScreen', () => {
   it('typing in search filters and shows results', async () => {
     await renderAuthenticatedApp();
     await userEvent.keyboard('{Control>}f{/Control}');
-    await userEvent.type(screen.getByRole('searchbox'), 'blood');
+    const searchInput = screen.getByRole('searchbox');
+    searchInput.focus();
+    await userEvent.keyboard('{Enter}');
+    await userEvent.type(searchInput, 'blood');
     expect(screen.getByRole('heading', { name: 'Health logs' })).toBeInTheDocument();
     expect(screen.getByRole('list', { name: /search results - health logs/i })).toHaveTextContent('Blood pressure');
   });

@@ -8,6 +8,23 @@ import { PersistentNowBar } from '../components/PersistentNowBar';
  */
 export function TasksScreen() {
   const { openModal } = useDesktop();
+  const tabs = ['Upcoming', 'Today', 'Overdue', 'Done'] as const;
+  const [activeTab, setActiveTab] = React.useState<(typeof tabs)[number]>('Today');
+  const tabRefs = React.useRef<Array<HTMLButtonElement | null>>([]);
+
+  const handleTabKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
+    let nextIndex = index;
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') nextIndex = (index + 1) % tabs.length;
+    else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') nextIndex = (index - 1 + tabs.length) % tabs.length;
+    else if (event.key === 'Home') nextIndex = 0;
+    else if (event.key === 'End') nextIndex = tabs.length - 1;
+    else return;
+
+    event.preventDefault();
+    const nextTab = tabs[nextIndex];
+    setActiveTab(nextTab);
+    tabRefs.current[nextIndex]?.focus();
+  };
 
   return (
     <div className="app-page tasks-page">
@@ -47,11 +64,23 @@ export function TasksScreen() {
         <span>You have 2 overdue tasks</span>
         <button type="button" className="link-button">View →</button>
       </div>
-      <div className="tasks-tabs" role="tablist">
-        <button type="button" role="tab">Upcoming</button>
-        <button type="button" role="tab" aria-selected="true">Today</button>
-        <button type="button" role="tab">Overdue</button>
-        <button type="button" role="tab">Done</button>
+      <div className="tasks-tabs" role="tablist" aria-orientation="horizontal">
+        {tabs.map((tab, index) => (
+          <button
+            key={tab}
+            type="button"
+            role="tab"
+            aria-selected={activeTab === tab}
+            tabIndex={activeTab === tab ? 0 : -1}
+            ref={(el) => {
+              tabRefs.current[index] = el;
+            }}
+            onClick={() => setActiveTab(tab)}
+            onKeyDown={(event) => handleTabKeyDown(event, index)}
+          >
+            {tab}
+          </button>
+        ))}
       </div>
 
       <div className="tasks-layout">

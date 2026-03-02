@@ -69,15 +69,47 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: /^tasks$/i })).toBeInTheDocument();
   });
 
-  it('ArrowDown then Enter on role selection moves to sign-in', async () => {
+  it('supports keyboard navigation within Tasks tabs', async () => {
+    await renderAuthenticatedApp();
+    await userEvent.click(screen.getByRole('button', { name: /tasks/i }));
+
+    const todayTab = screen.getByRole('tab', { name: 'Today' });
+    todayTab.focus();
+    expect(todayTab).toHaveAttribute('aria-selected', 'true');
+
+    await userEvent.keyboard('{ArrowDown}');
+    expect(screen.getByRole('tab', { name: 'Overdue' })).toHaveAttribute('aria-selected', 'true');
+
+    await userEvent.keyboard('{Home}');
+    expect(screen.getByRole('tab', { name: 'Upcoming' })).toHaveAttribute('aria-selected', 'true');
+  });
+
+  it('Space-select role then Enter moves to sign-in', async () => {
     render(<App />);
     const caregiverRadio = screen.getByRole('radio', { name: /caregiver/i });
     caregiverRadio.focus();
-    await userEvent.keyboard('{ArrowDown}');
-    expect(screen.getByRole('radio', { name: /care recipient/i })).toBeChecked();
-
+    await userEvent.keyboard(' ');
+    expect(caregiverRadio).toBeChecked();
     await userEvent.keyboard('{Enter}');
     expect(screen.getByRole('heading', { name: /sign in to your account/i })).toBeInTheDocument();
+  });
+
+  it('Enter on focused role option selects it and moves to sign-in', async () => {
+    render(<App />);
+    const caregiverRadio = screen.getByRole('radio', { name: /caregiver/i });
+    caregiverRadio.focus();
+    await userEvent.keyboard('{Enter}');
+    expect(screen.getByRole('heading', { name: /sign in to your account/i })).toBeInTheDocument();
+  });
+
+  it('role options remain keyboard reachable with arrow-key stepping', async () => {
+    render(<App />);
+    const caregiverRadio = screen.getByRole('radio', { name: /caregiver/i });
+    caregiverRadio.focus();
+    expect(caregiverRadio).toHaveFocus();
+
+    await userEvent.keyboard('{ArrowDown}');
+    expect(screen.getByRole('radio', { name: /care recipient/i })).toHaveFocus();
   });
 
   it('navigates to Profile from sidebar after sign in', async () => {
@@ -85,4 +117,57 @@ describe('App', () => {
     await userEvent.click(screen.getByRole('button', { name: /profile/i }));
     expect(screen.getByRole('heading', { name: /profile & settings/i })).toBeInTheDocument();
   });
+
+  it('search input requires Enter to type and ArrowDown moves focus when not activated', async () => {
+    await renderAuthenticatedApp();
+    await userEvent.click(screen.getByRole('button', { name: /^messages$/i }));
+
+    const searchInput = screen.getByRole('searchbox', { name: /search messages/i });
+    searchInput.focus();
+
+    await userEvent.keyboard('a');
+    expect(searchInput).toHaveValue('');
+
+    await userEvent.keyboard('{ArrowDown}');
+    expect(searchInput).not.toHaveFocus();
+
+    searchInput.focus();
+    await userEvent.keyboard('{Enter}');
+    await userEvent.keyboard('a');
+    expect(searchInput).toHaveValue('a');
+  });
+
+  it('ArrowDown moves focus out of email field on sign-in screen', async () => {
+    render(<App />);
+    await userEvent.click(screen.getByRole('radio', { name: /care recipient/i }));
+    await userEvent.click(screen.getByRole('button', { name: /continue/i }));
+
+    const emailInput = screen.getByLabelText(/email address/i);
+    const passwordInput = screen.getByLabelText('Password *');
+    emailInput.focus();
+
+    await userEvent.keyboard('{ArrowDown}');
+    expect(passwordInput).toHaveFocus();
+  });
+
+  it('ArrowRight in password field keeps caret movement until right edge', async () => {
+    render(<App />);
+    await userEvent.click(screen.getByRole('radio', { name: /care recipient/i }));
+    await userEvent.click(screen.getByRole('button', { name: /continue/i }));
+
+    const passwordInput = screen.getByLabelText('Password *') as HTMLInputElement;
+    const showPasswordButton = screen.getByRole('button', { name: /show password/i });
+
+    passwordInput.focus();
+    await userEvent.type(passwordInput, 'abcd');
+    passwordInput.setSelectionRange(2, 2);
+
+    await userEvent.keyboard('{ArrowRight}');
+    expect(passwordInput).toHaveFocus();
+
+    passwordInput.setSelectionRange(4, 4);
+    await userEvent.keyboard('{ArrowRight}');
+    expect(showPasswordButton).toHaveFocus();
+  });
+
 });

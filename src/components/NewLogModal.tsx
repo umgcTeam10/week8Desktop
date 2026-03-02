@@ -15,8 +15,10 @@ export function NewLogModal() {
   const [heartRate, setHeartRate] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const dialogRef = useRef<HTMLDivElement>(null);
+  const previousActive = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
+    previousActive.current = document.activeElement as HTMLElement | null;
     const first = dialogRef.current?.querySelector<HTMLElement>(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
     );
@@ -39,7 +41,10 @@ export function NewLogModal() {
       }
     };
     document.addEventListener('keydown', handleKey);
-    return () => document.removeEventListener('keydown', handleKey);
+    return () => {
+      document.removeEventListener('keydown', handleKey);
+      previousActive.current?.focus();
+    };
   }, []);
 
   const validate = (): boolean => {

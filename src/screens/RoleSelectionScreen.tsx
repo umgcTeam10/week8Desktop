@@ -14,12 +14,17 @@ export function RoleSelectionScreen() {
   };
 
   const handleRoleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+    if (event.key !== 'Enter') return;
+
+    const target = event.target as HTMLElement | null;
+    if (target instanceof HTMLInputElement && target.type === 'radio' && target.name === 'role') {
       event.preventDefault();
-      if (!selectedRole || selectedRole === 'caregiver') setSelectedRole('care-recipient');
-      else setSelectedRole('caregiver');
+      setSelectedRole(target.value as 'caregiver' | 'care-recipient');
+      setAuthPhase('signin');
+      return;
     }
-    if (event.key === 'Enter' && selectedRole) {
+
+    if (selectedRole) {
       event.preventDefault();
       setAuthPhase('signin');
     }
@@ -45,7 +50,7 @@ export function RoleSelectionScreen() {
           onKeyDown={handleRoleKeyDown}
         >
           <div id="role-desc" className="sr-only">
-            Use Up arrow and Down arrow keys to switch roles, then press Enter to continue.
+            Use Tab to reach a role option, press Space to select, then press Enter to continue.
           </div>
           <label className={`role-card ${selectedRole === 'caregiver' ? 'role-card-selected' : ''}`}>
             <input
@@ -109,7 +114,7 @@ export function RoleSelectionScreen() {
         </button>
         <p className="next-hint">Next: Sign in to your account</p>
         <p className="keyboard-tip" role="status">
-          <strong>Keyboard tip:</strong> Use <kbd>Up</kbd> <kbd>Down</kbd> arrow keys to switch roles, then press
+          <strong>Keyboard tip:</strong> Use <kbd>Tab</kbd> to move between options, <kbd>Space</kbd> to select a role, then
           {' '}
           <kbd>Enter</kbd>
           {' '}

@@ -1635,11 +1635,30 @@ body.high-contrast .btn-secondary {
   margin: 0.3rem 0;
 }
 
+.dashboard-next-appt-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.dashboard-next-appt-details {
+  display: grid;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.dashboard-next-appt-footer .btn-secondary {
+  flex-shrink: 0;
+}
+
 .dashboard-detail-row {
   color: #5f7b95;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 0.4rem;
+  margin: 0;
 }
 
 .dashboard-inline-icon {
@@ -2816,6 +2835,15 @@ body.zoom-stacked-layout .messages-context-panel {
   .profile-content,
   .messages-layout {
     grid-template-columns: 1fr;
+  }
+
+  .dashboard-next-appt-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .dashboard-next-appt-footer .btn-secondary {
+    width: 100%;
   }
 }
 

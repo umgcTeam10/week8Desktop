@@ -69,7 +69,7 @@ export function NewLogModal() {
       document.removeEventListener('keydown', handleKey);
       previousActive.current?.focus();
     };
-  }, []);
+  }, [closeModal]);
 
   const validate = (): boolean => {
     const next: Record<string, string> = {};

@@ -86,12 +86,16 @@ export function DashboardScreen() {
             </div>
             <p><strong>{nextAppointment?.title}</strong></p>
             <p className="panel-subtitle">Knee rehabilitation session</p>
-            <p className="dashboard-detail-row">
-              <ClockIcon className="dashboard-inline-icon" />
-              {nextAppointment?.date} at {nextAppointment?.time}
-            </p>
-            <p className="dashboard-detail-row">Dr. Lisa Chen, PT</p>
-            <button type="button" className="btn-secondary">Set Reminder</button>
+            <div className="dashboard-next-appt-footer">
+              <div className="dashboard-next-appt-details">
+                <p className="dashboard-detail-row">
+                  <ClockIcon className="dashboard-inline-icon" />
+                  {nextAppointment?.date} at {nextAppointment?.time}
+                </p>
+                <p className="dashboard-detail-row">Dr. Lisa Chen, PT</p>
+              </div>
+              <button type="button" className="btn-secondary">Set Reminder</button>
+            </div>
           </section>
 
           <section className="dashboard-care-team app-surface-card">

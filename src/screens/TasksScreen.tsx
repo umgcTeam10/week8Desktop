@@ -14,8 +14,8 @@ export function TasksScreen() {
 
   const handleTabKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
     let nextIndex = index;
-    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') nextIndex = (index + 1) % tabs.length;
-    else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') nextIndex = (index - 1 + tabs.length) % tabs.length;
+    if (event.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length;
+    else if (event.key === 'ArrowLeft') nextIndex = (index - 1 + tabs.length) % tabs.length;
     else if (event.key === 'Home') nextIndex = 0;
     else if (event.key === 'End') nextIndex = tabs.length - 1;
     else return;

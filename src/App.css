@@ -1808,6 +1808,10 @@ body.high-contrast .btn-secondary {
   color: #5c7791;
 }
 
+.tasks-now-card .tasks-now-label {
+  color: #fff;
+}
+
 .tasks-now-actions {
   margin-top: 0.85rem;
   display: flex;

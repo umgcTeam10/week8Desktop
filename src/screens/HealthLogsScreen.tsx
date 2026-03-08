@@ -81,7 +81,7 @@ export function HealthLogsScreen() {
 
           {error && <div className="error-banner" role="alert">{error}</div>}
 
-          <section aria-label="Recent Logs">
+          <section aria-label="Log entries">
             <h3>
               Entries
               {' '}

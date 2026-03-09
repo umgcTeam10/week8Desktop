@@ -69,7 +69,7 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: /^tasks$/i })).toBeInTheDocument();
   });
 
-  it('supports keyboard navigation within Tasks tabs', async () => {
+  it('supports keyboard navigation within Tasks tabs and lets focus move onward', async () => {
     await renderAuthenticatedApp();
     await userEvent.click(screen.getByRole('button', { name: /tasks/i }));
 
@@ -77,11 +77,14 @@ describe('App', () => {
     todayTab.focus();
     expect(todayTab).toHaveAttribute('aria-selected', 'true');
 
-    await userEvent.keyboard('{ArrowDown}');
+    await userEvent.keyboard('{ArrowRight}');
     expect(screen.getByRole('tab', { name: 'Overdue' })).toHaveAttribute('aria-selected', 'true');
 
     await userEvent.keyboard('{Home}');
     expect(screen.getByRole('tab', { name: 'Upcoming' })).toHaveAttribute('aria-selected', 'true');
+
+    await userEvent.keyboard('{ArrowDown}');
+    expect(screen.getByLabelText('Mark Blood Pressure Check done')).toHaveFocus();
   });
 
   it('Space-select role then Enter moves to sign-in', async () => {

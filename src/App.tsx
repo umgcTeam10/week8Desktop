@@ -72,7 +72,12 @@ function usesNativeArrowBehavior(target: EventTarget | null): boolean {
 function getFocusableElements(): HTMLElement[] {
   return Array.from(document.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter((el) => {
     const style = window.getComputedStyle(el);
-    return style.display !== 'none' && style.visibility !== 'hidden' && el.getAttribute('aria-hidden') !== 'true';
+    return (
+      style.display !== 'none' &&
+      style.visibility !== 'hidden' &&
+      el.getAttribute('aria-hidden') !== 'true' &&
+      el.tabIndex >= 0
+    );
   });
 }
 

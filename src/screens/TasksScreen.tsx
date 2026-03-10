@@ -118,7 +118,7 @@ export function TasksScreen() {
           </li>
         </ul>
 
-        <aside className="tasks-now-card">
+        <aside className="tasks-now-card" aria-label="Current task">
           <p className="tasks-now-label">Now</p>
           <h3>Physical Therapy Appointment</h3>
           <p>Due now - 02:00 PM - At clinic</p>

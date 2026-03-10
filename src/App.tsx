@@ -222,8 +222,8 @@ function AppContent() {
         <a href="#main-content" className="skip-link">Skip to main content</a>
         <header className="app-title-bar" role="banner">
           <h1 className="app-title">CareConnect</h1>
+          <Toolbar />
         </header>
-        <Toolbar />
         <main id="main-content" className="app-main" role="main" tabIndex={-1}>
           <RoleSelectionScreen />
         </main>
@@ -240,8 +240,8 @@ function AppContent() {
         <a href="#main-content" className="skip-link">Skip to main content</a>
         <header className="app-title-bar" role="banner">
           <h1 className="app-title">CareConnect</h1>
+          <Toolbar />
         </header>
-        <Toolbar />
         <main id="main-content" className="app-main" role="main" tabIndex={-1}>
           <SignInScreen />
         </main>
@@ -257,8 +257,8 @@ function AppContent() {
       <a href="#main-content" className="skip-link">Skip to main content</a>
       <header className="app-title-bar" role="banner">
         <h1 className="app-title">CareConnect</h1>
+        <Toolbar />
       </header>
-      <Toolbar />
       <div className="app-authenticated">
         <AppSidebar />
         <main id="main-content" className="app-main" role="main" tabIndex={-1}>

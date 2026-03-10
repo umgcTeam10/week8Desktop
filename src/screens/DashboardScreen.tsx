@@ -78,7 +78,7 @@ export function DashboardScreen() {
           </section>
         </div>
 
-        <aside className="dashboard-side">
+        <aside className="dashboard-side" aria-label="Appointment and care team">
           <section className="dashboard-next-appt app-surface-card" aria-labelledby="next-appt-heading">
             <div className="section-row">
               <h3 id="next-appt-heading">Next Appointment</h3>

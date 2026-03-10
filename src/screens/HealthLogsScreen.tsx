@@ -37,7 +37,7 @@ export function HealthLogsScreen() {
       <PersistentNowBar />
 
       <div className="layout-two-panel health-logs-layout">
-        <aside className="panel-side health-logs-side">
+        <aside className="panel-side health-logs-side" aria-label="Health summary">
           <header className="health-logs-side-header">
             <h3 id="health-summary-heading">Health Summary</h3>
             <a href="#recent-logs" className="link">View Report</a>

@@ -657,7 +657,7 @@ body.high-contrast .panel-welcome {
   border-bottom: 2px solid #1488cc;
   transform: rotate(40deg);
 }
-.link-button { background: none; border: none; color: #1488cc; cursor: pointer; font-size: inherit; padding: 0; }
+.link-button { background: none; border: none; color: #0d6ea8; cursor: pointer; font-size: inherit; padding: 0; }
 .role-help-link-wrap { text-align: center; margin: 0.75rem 0; }
 .role-help-link {
   display: inline-flex;
@@ -687,7 +687,7 @@ body.high-contrast .panel-welcome {
 .panel-auth .btn-primary {
   margin-top: 1rem;
   min-height: 56px;
-  background: #0e80c4;
+  background: #0c76b6;
   border-radius: 11px;
   font-size: 1.04rem;
 }
@@ -711,7 +711,7 @@ body.high-contrast .panel-welcome {
   font-weight: 700;
   color: #12263f;
 }
-.form-helper { font-size: 0.95rem; color: #5f7b93; margin: 0.42rem 0 0; line-height: 1.35; }
+.form-helper { font-size: 0.95rem; color: #5a758f; margin: 0.42rem 0 0; line-height: 1.35; }
 .form-helper-row {
   display: flex;
   align-items: baseline;
@@ -800,7 +800,7 @@ body.high-contrast .panel-welcome {
 .separator {
   text-align: center;
   margin: 1.1rem 0 0.6rem;
-  color: #607d96;
+  color: #5a758f;
   font-size: 1rem;
   display: flex;
   align-items: center;
@@ -815,7 +815,7 @@ body.high-contrast .panel-welcome {
 }
 .skip-link-inline { position: static; left: auto; }
 .skip-link-inline:not(:focus) { clip: rect(0,0,0,0); position: absolute; }
-.link { color: #1385c8; font-weight: 600; text-decoration: none; }
+.link { color: #0d6ea8; font-weight: 600; text-decoration: none; }
 .link:hover { text-decoration: underline; }
 
 .error-summary {

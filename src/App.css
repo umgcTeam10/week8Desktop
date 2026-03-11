@@ -746,7 +746,7 @@ body.high-contrast .panel-welcome {
 .link-button {
   background: none;
   border: none;
-  color: #1385c8;
+  color: #0b63a3;
   cursor: pointer;
   font-size: inherit;
   padding: 0;
@@ -969,12 +969,17 @@ body.high-contrast .panel-welcome {
   position: absolute;
 }
 .link {
-  color: #1385c8;
+  color: #0b63a3;
   font-weight: 600;
   text-decoration: none;
 }
 .link:hover {
   text-decoration: underline;
+}
+.link-button:hover,
+.link-button:focus-visible,
+.link:focus-visible {
+  color: #084d7f;
 }
 
 .error-summary {

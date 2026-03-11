@@ -10,6 +10,7 @@
     "build": "tsc -p tsconfig.electron.json && react-scripts build",
     "start": "npm run build && electron .",
     "dev": "concurrently \"npm run build -- --watch\" \"wait-on dist/main/main.js && electron .\"",
+    "web": "react-scripts start",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --max-warnings=0",
     "test": "jest",
     "test:coverage": "jest --coverage",

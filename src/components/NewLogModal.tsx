@@ -24,6 +24,25 @@ export function NewLogModal() {
     );
     first?.focus();
     const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        return;
+      }
+      if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && dialogRef.current) {
+        const focusable = Array.from(
+          dialogRef.current.querySelectorAll<HTMLElement>(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          )
+        );
+        const idx = focusable.indexOf(document.activeElement as HTMLElement);
+        if (idx < 0) return;
+        const nextIdx = e.key === 'ArrowDown'
+          ? (idx + 1) % focusable.length
+          : (idx - 1 + focusable.length) % focusable.length;
+        e.preventDefault();
+        focusable[nextIdx]?.focus();
+        return;
+      }
       if (e.key !== 'Tab' || !dialogRef.current) return;
       const focusable = Array.from(
         dialogRef.current.querySelectorAll<HTMLElement>(
@@ -32,6 +51,11 @@ export function NewLogModal() {
       );
       const firstEl = focusable[0];
       const lastEl = focusable[focusable.length - 1];
+      if (!focusable.includes(document.activeElement as HTMLElement)) {
+        e.preventDefault();
+        firstEl?.focus();
+        return;
+      }
       if (e.shiftKey && document.activeElement === firstEl) {
         e.preventDefault();
         lastEl?.focus();
@@ -45,7 +69,7 @@ export function NewLogModal() {
       document.removeEventListener('keydown', handleKey);
       previousActive.current?.focus();
     };
-  }, []);
+  }, [closeModal]);
 
   const validate = (): boolean => {
     const next: Record<string, string> = {};

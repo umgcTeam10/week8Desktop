@@ -746,7 +746,7 @@ body.high-contrast .panel-welcome {
 .link-button {
   background: none;
   border: none;
-  color: #0e6fa8;
+  color: #1385c8;
   cursor: pointer;
   font-size: inherit;
   padding: 0;
@@ -802,7 +802,7 @@ body.high-contrast .panel-welcome {
 .panel-auth .btn-primary {
   margin-top: 1rem;
   min-height: 56px;
-  background: #0e80c4;
+  background: #0c76b6;
   border-radius: 11px;
   font-size: 1.04rem;
 }
@@ -834,7 +834,7 @@ body.high-contrast .panel-welcome {
 }
 .form-helper {
   font-size: 0.95rem;
-  color: #5f7b93;
+  color: #5a758f;
   margin: 0.42rem 0 0;
   line-height: 1.35;
 }
@@ -947,7 +947,7 @@ body.high-contrast .panel-welcome {
 .separator {
   text-align: center;
   margin: 1.1rem 0 0.6rem;
-  color: #607d96;
+  color: #5a758f;
   font-size: 1rem;
   display: flex;
   align-items: center;
@@ -1803,11 +1803,30 @@ body.high-contrast .btn-secondary {
   margin: 0.3rem 0;
 }
 
+.dashboard-next-appt-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.dashboard-next-appt-details {
+  display: grid;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.dashboard-next-appt-footer .btn-secondary {
+  flex-shrink: 0;
+}
+
 .dashboard-detail-row {
   color: #5f7b95;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 0.4rem;
+  margin: 0;
 }
 
 .dashboard-inline-icon {
@@ -1974,6 +1993,10 @@ body.high-contrast .btn-secondary {
 .tasks-now-card p {
   margin: 0;
   color: #5c7791;
+}
+
+.tasks-now-card .tasks-now-label {
+  color: #fff;
 }
 
 .tasks-now-actions {
@@ -2989,6 +3012,15 @@ body.zoom-stacked-layout .messages-context-panel {
   .profile-content,
   .messages-layout {
     grid-template-columns: 1fr;
+  }
+
+  .dashboard-next-appt-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .dashboard-next-appt-footer .btn-secondary {
+    width: 100%;
   }
 }
 

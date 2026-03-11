@@ -16,12 +16,12 @@ export function AppSidebar() {
   const { screen, setScreen } = useDesktop();
 
   return (
-    <aside className="app-sidebar" role="navigation" aria-label="Main navigation">
+    <aside className="app-sidebar" aria-label="App sidebar">
       <div className="app-sidebar-brand">
         <HeartBadgeIcon className="app-sidebar-brand-icon" />
         <span>CareConnect</span>
       </div>
-      <nav className="app-sidebar-nav">
+      <nav className="app-sidebar-nav" aria-label="Main navigation">
         {navItems.map(({ key, label, Icon }) => (
           <button
             type="button"

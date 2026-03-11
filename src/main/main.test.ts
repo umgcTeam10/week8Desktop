@@ -96,7 +96,7 @@ describe('main process', () => {
       }),
     );
     expect(mockMaximize).toHaveBeenCalledTimes(1);
-    expect(mockLoadFile).toHaveBeenCalledWith(expect.stringContaining('build/index.html'));
+    expect(mockLoadFile).toHaveBeenCalledWith(expect.stringMatching(/build[\\/]+index\.html$/));
   });
 
   it('persists window state on close', async () => {

@@ -26,9 +26,41 @@ export function HealthLogsScreen() {
       icon: <CheckCircleIcon className="health-log-icon-svg" />,
     },
   };
+  const contrastStyles = `
+    .health-logs-page .health-summary-card span,
+    .health-logs-page .health-summary-card small {
+      color: #557188;
+    }
+
+    .health-logs-page .health-filter-card h4 {
+      color: #506c85;
+    }
+
+    .health-logs-page .health-filter-card p {
+      color: #557188;
+    }
+
+    .health-logs-page .health-week-grid span {
+      color: #506c85;
+    }
+
+    .health-logs-page .health-chip {
+      color: #506c85;
+    }
+
+    .health-logs-page .health-log-entry-meta {
+      color: #58758f;
+    }
+
+    .health-logs-page .app-page-user .tag-blue {
+      color: #25679b;
+      border-color: #a9cde6;
+    }
+  `;
 
   return (
     <div className="app-page health-logs-page">
+      <style>{contrastStyles}</style>
       <header className="app-page-topbar" aria-label="Health Logs status">
         <h2>Health Logs</h2>
         <p>Monday, January 26, 2026 | 4:02 PM</p>
@@ -37,7 +69,7 @@ export function HealthLogsScreen() {
       <PersistentNowBar />
 
       <div className="layout-two-panel health-logs-layout">
-        <aside className="panel-side health-logs-side">
+        <aside className="panel-side health-logs-side" aria-label="Health summary">
           <header className="health-logs-side-header">
             <h3 id="health-summary-heading">Health Summary</h3>
             <a href="#recent-logs" className="link">View Report</a>
@@ -81,7 +113,7 @@ export function HealthLogsScreen() {
 
           {error && <div className="error-banner" role="alert">{error}</div>}
 
-          <section aria-label="Recent Logs">
+          <section aria-label="Log entries">
             <h3>
               Entries
               {' '}

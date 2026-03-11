@@ -2,6 +2,11 @@ import React from "react";
 import { useDesktop } from "../context/DesktopContext";
 import { PersistentNowBar } from "../components/PersistentNowBar";
 
+const patientTagStyle: React.CSSProperties = { color: "#1f5f91" };
+const statsLabelStyle: React.CSSProperties = { color: "#53697f" };
+const settingMetaStyle: React.CSSProperties = { color: "#556f86" };
+const sliderScaleStyle: React.CSSProperties = { color: "#556d83" };
+
 /**
  * Design 2.11 Profile and Settings: Notifications, Preferences, Accessibility.
  * A11y fixes:
@@ -28,7 +33,7 @@ export function ProfileScreen() {
         <h2>Profile &amp; Settings</h2>
         <p>Monday, January 26, 2026 | 4:02 PM</p>
         <div className="app-page-user">
-          Robert <span className="tag tag-blue">Patient</span>
+          Robert <span className="tag tag-blue" style={patientTagStyle}>Patient</span>
         </div>
       </header>
 
@@ -81,15 +86,15 @@ export function ProfileScreen() {
             <h3 id="stats-heading">Account Statistics</h3>
             <ul className="profile-stats-list">
               <li>
-                <span>Member since</span>
+                <span style={statsLabelStyle}>Member since</span>
                 <strong>January 2024</strong>
               </li>
               <li>
-                <span>Active days</span>
+                <span style={statsLabelStyle}>Active days</span>
                 <strong>45 days</strong>
               </li>
               <li>
-                <span>Tasks completed</span>
+                <span style={statsLabelStyle}>Tasks completed</span>
                 <strong>128</strong>
               </li>
             </ul>
@@ -122,7 +127,7 @@ export function ProfileScreen() {
                   <input type="checkbox" defaultChecked />
                   Push Notifications
                 </label>
-                <span>Receive app notifications</span>
+                <span style={settingMetaStyle}>Receive app notifications</span>
               </div>
 
               <div className="profile-setting-row">
@@ -130,7 +135,7 @@ export function ProfileScreen() {
                   <input type="checkbox" defaultChecked />
                   Email Notifications
                 </label>
-                <span>Receive email updates</span>
+                <span style={settingMetaStyle}>Receive email updates</span>
               </div>
 
               <div className="profile-setting-row">
@@ -138,12 +143,12 @@ export function ProfileScreen() {
                   <input type="checkbox" defaultChecked />
                   Task Reminders
                 </label>
-                <span>Remind me about tasks</span>
+                <span style={settingMetaStyle}>Remind me about tasks</span>
               </div>
 
               <div className="profile-setting-row">
                 <strong>Quiet Hours</strong>
-                <span>10:00 PM - 7:00 AM</span>
+                <span style={settingMetaStyle}>10:00 PM - 7:00 AM</span>
               </div>
             </div>
           </section>
@@ -166,12 +171,14 @@ export function ProfileScreen() {
                   />
                   Dark Mode
                 </label>
-                <span>Currently {highContrast ? "enabled" : "disabled"}</span>
+                <span style={settingMetaStyle}>
+                  Currently {highContrast ? "enabled" : "disabled"}
+                </span>
               </div>
 
               <div className="profile-setting-row">
                 <strong>Language</strong>
-                <span>English (US)</span>
+                <span style={settingMetaStyle}>English (US)</span>
               </div>
 
               <div className="profile-setting-row">
@@ -192,7 +199,7 @@ export function ProfileScreen() {
 
               <div className="profile-setting-row">
                 <strong>Date Format</strong>
-                <span>MM/DD/YYYY</span>
+                <span style={settingMetaStyle}>MM/DD/YYYY</span>
               </div>
             </div>
           </section>
@@ -218,7 +225,11 @@ export function ProfileScreen() {
                 aria-valuemin={12}
                 aria-valuemax={24}
               />
-              <div className="profile-slider-scale" aria-hidden="true">
+              <div
+                className="profile-slider-scale"
+                aria-hidden="true"
+                style={sliderScaleStyle}
+              >
                 <span>A (Small)</span>
                 <span>Normal — {Math.round(16 * zoom)}px</span>
                 <span>A (Large)</span>

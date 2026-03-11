@@ -3,6 +3,8 @@ import { mockHealthLogs } from "../data/mockData";
 import { mockMessages } from "../data/mockData";
 import { PersistentNowBar } from "../components/PersistentNowBar";
 
+const patientTagStyle: React.CSSProperties = { color: "#1f5f91" };
+
 /**
  * Global search (Ctrl+F). Design: Search settings / global search bar.
  * A11y fixes:
@@ -31,7 +33,7 @@ export function SearchScreen() {
         <h2>Search</h2>
         <p>Monday, January 26, 2026 | 4:02 PM</p>
         <div className="app-page-user">
-          Robert <span className="tag tag-blue">Patient</span>
+          Robert <span className="tag tag-blue" style={patientTagStyle}>Patient</span>
         </div>
       </header>
 

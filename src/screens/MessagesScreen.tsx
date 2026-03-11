@@ -4,6 +4,18 @@ import { mockMessages } from "../data/mockData";
 import { PersistentNowBar } from "../components/PersistentNowBar";
 import { MessageIcon, UserIcon } from "../components/AppIcons";
 
+const patientTagStyle: React.CSSProperties = { color: "#1f5f91" };
+const sectionHeadingStyle: React.CSSProperties = { color: "#51697f" };
+const quickContactMetaStyle: React.CSSProperties = { color: "#556d83" };
+const conversationMetaStyle: React.CSSProperties = { color: "#587187" };
+const threadTimeStyle: React.CSSProperties = { color: "#5f778d" };
+const typingStyle: React.CSSProperties = { color: "#5d758c" };
+const sosLabelStyle: React.CSSProperties = { color: "#9c4955" };
+const sosButtonStyle: React.CSSProperties = { background: "#be3148" };
+const sharedFileMetaStyle: React.CSSProperties = { color: "#5d768d" };
+const actionButtonStyle: React.CSSProperties = { color: "#48627a" };
+const dangerActionStyle: React.CSSProperties = { color: "#a43748" };
+
 /**
  * Design 2.10 Messages: conversation list, active thread, Emergency SOS, contextual panel.
  * A11y fixes:
@@ -45,7 +57,7 @@ export function MessagesScreen() {
         <h2>Messages</h2>
         <p>Monday, January 26, 2026 | 4:02 PM</p>
         <div className="app-page-user">
-          Robert <span className="tag tag-blue">Patient</span>
+          Robert <span className="tag tag-blue" style={patientTagStyle}>Patient</span>
         </div>
       </header>
 
@@ -58,7 +70,7 @@ export function MessagesScreen() {
           aria-label="Contacts and conversations"
         >
           <section aria-labelledby="quick-contact-heading">
-            <h3 id="quick-contact-heading">Quick Contact</h3>
+            <h3 id="quick-contact-heading" style={sectionHeadingStyle}>Quick Contact</h3>
             <div className="quick-contacts">
               {quickContacts.map((contact) => (
                 <div key={contact.initials} className="quick-contact-item">
@@ -70,7 +82,7 @@ export function MessagesScreen() {
                     <span aria-hidden="true">{contact.initials}</span>
                   </button>
                   <strong>{contact.name}</strong>
-                  <small>{contact.role}</small>
+                  <small style={quickContactMetaStyle}>{contact.role}</small>
                 </div>
               ))}
             </div>
@@ -90,8 +102,8 @@ export function MessagesScreen() {
                 className={`list-item ${msg.read ? "" : "active"}`}
               >
                 <strong>{msg.from}</strong>
-                <p>{msg.subject}</p>
-                <small>{msg.date}</small>
+                <p style={conversationMetaStyle}>{msg.subject}</p>
+                <small style={conversationMetaStyle}>{msg.date}</small>
               </li>
             ))}
           </ul>
@@ -131,7 +143,7 @@ export function MessagesScreen() {
             aria-label="Message thread with Robert Martinez"
             aria-live="polite"
           >
-            <p className="thread-time">1 hour ago</p>
+            <p className="thread-time" style={threadTimeStyle}>1 hour ago</p>
             <p className="incoming">
               <span className="sr-only">Robert Martinez: </span>
               Morning walk completed! Felt great today.
@@ -144,7 +156,12 @@ export function MessagesScreen() {
               <span className="sr-only">You: </span>
               That&apos;s wonderful! How long did you walk?
             </p>
-            <p className="typing" aria-live="polite" aria-atomic="true">
+            <p
+              className="typing"
+              aria-live="polite"
+              aria-atomic="true"
+              style={typingStyle}
+            >
               Robert is typing...
             </p>
           </section>
@@ -196,12 +213,13 @@ export function MessagesScreen() {
           aria-label="Conversation context and emergency"
         >
           <div className="sos-banner" role="region" aria-label="Emergency SOS">
-            <p className="sos-banner-label">Emergency</p>
+            <p className="sos-banner-label" style={sosLabelStyle}>Emergency</p>
             <button
               type="button"
               className="btn-sos"
               onClick={() => openModal("sos-confirm")}
               aria-label="Emergency SOS (Ctrl+Shift+E)"
+              style={sosButtonStyle}
             >
               EMERGENCY SOS
             </button>
@@ -238,7 +256,7 @@ export function MessagesScreen() {
                   />
                   <div>
                     <strong>{file.name}</strong>
-                    <small>{file.size}</small>
+                    <small style={sharedFileMetaStyle}>{file.size}</small>
                   </div>
                 </li>
               ))}
@@ -250,16 +268,16 @@ export function MessagesScreen() {
             aria-label="Conversation actions"
           >
             <li>
-              <button type="button">
+              <button type="button" style={actionButtonStyle}>
                 Scheduled Messages{" "}
-                <span aria-label="2 scheduled messages">2</span>
+                <span aria-label="2 scheduled messages" style={actionButtonStyle}>2</span>
               </button>
             </li>
             <li>
-              <button type="button">Mute Notifications</button>
+              <button type="button" style={actionButtonStyle}>Mute Notifications</button>
             </li>
             <li>
-              <button type="button" className="danger">
+              <button type="button" className="danger" style={dangerActionStyle}>
                 Block Contact
               </button>
             </li>

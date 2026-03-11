@@ -2,6 +2,11 @@ import React from "react";
 import { mockCalendarEvents } from "../data/mockData";
 import { PersistentNowBar } from "../components/PersistentNowBar";
 
+const patientTagStyle: React.CSSProperties = { color: "#1f5f91" };
+const overviewTextStyle: React.CSSProperties = { color: "#4d667d" };
+const weekdayHeadingStyle: React.CSSProperties = { color: "#556f85" };
+const scheduledTagStyle: React.CSSProperties = { color: "#8a5400" };
+
 const WEEKDAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const REFERENCE_DATE = new Date(2026, 0, 26);
 
@@ -234,7 +239,7 @@ export function CalendarScreen() {
         <h2>Calendar</h2>
         <p>Monday, January 26, 2026 | 4:02 PM</p>
         <div className="app-page-user">
-          Robert <span className="tag tag-blue">Patient</span>
+          Robert <span className="tag tag-blue" style={patientTagStyle}>Patient</span>
         </div>
       </header>
 
@@ -246,7 +251,7 @@ export function CalendarScreen() {
           aria-labelledby="calendar-heading"
         >
           <h3 id="calendar-heading">Calendar Overview</h3>
-          <p>View your schedule and upcoming appointments</p>
+          <p style={overviewTextStyle}>View your schedule and upcoming appointments</p>
         </section>
 
         <section
@@ -295,7 +300,12 @@ export function CalendarScreen() {
             <thead className="calendar-weekdays">
               <tr>
                 {WEEKDAY_LABELS.map((weekday) => (
-                  <th key={weekday} scope="col" abbr={weekday}>
+                  <th
+                    key={weekday}
+                    scope="col"
+                    abbr={weekday}
+                    style={weekdayHeadingStyle}
+                  >
                     {weekday}
                   </th>
                 ))}
@@ -393,7 +403,11 @@ export function CalendarScreen() {
                     <strong>{event.title}</strong>
                     <p>{event.time}</p>
                   </div>
-                  <span className="tag" aria-label="Status: scheduled">
+                  <span
+                    className="tag"
+                    aria-label="Status: scheduled"
+                    style={scheduledTagStyle}
+                  >
                     scheduled
                   </span>
                 </li>

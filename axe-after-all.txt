@@ -2,20 +2,22 @@
 > careconnect-desktop@1.0.0 test
 > jest --watchAll=false --testPathPattern=a11y.axe
 
-(node:18622) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(node:18912) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
 (Use `node --trace-deprecation ...` to show where the warning was created)
 PASS src/screens/a11y.axe.test.tsx
   axe: SearchScreen
-    ✓ has no accessibility violations (87 ms)
+    ✓ has no accessibility violations (86 ms)
   axe: MessagesScreen
     ✓ has no accessibility violations (135 ms)
   axe: CalendarScreen
-    ✓ has no accessibility violations (246 ms)
+    ✓ has no accessibility violations (219 ms)
   axe: ProfileScreen
-    ✓ has no accessibility violations (88 ms)
+    ✓ has no accessibility violations (90 ms)
+  axe: SOSConfirmModal
+    ✓ has no accessibility violations (19 ms)
 
 Test Suites: 1 passed, 1 total
-Tests:       4 passed, 4 total
+Tests:       5 passed, 5 total
 Snapshots:   0 total
-Time:        1.611 s
+Time:        1.684 s, estimated 2 s
 Ran all test suites matching /a11y.axe/i.

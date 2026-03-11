@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { useDesktop } from '../context/DesktopContext';
+import React, { useEffect, useRef } from "react";
+import { useDesktop } from "../context/DesktopContext";
 
 export function SOSConfirmModal() {
   const { closeModal } = useDesktop();
@@ -9,17 +9,24 @@ export function SOSConfirmModal() {
   useEffect(() => {
     previousActive.current = document.activeElement as HTMLElement | null;
     const focusable = dialogRef.current?.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
     );
     const first = focusable?.[0] as HTMLElement | undefined;
     first?.focus();
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab' || !dialogRef.current) return;
+      // Escape dismisses the modal (WCAG 2.1.1)
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeModal();
+        return;
+      }
+
+      if (e.key !== "Tab" || !dialogRef.current) return;
       const focusable = Array.from(
         dialogRef.current.querySelectorAll(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        )
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        ),
       ) as HTMLElement[];
       const firstEl = focusable[0];
       const lastEl = focusable[focusable.length - 1];
@@ -36,12 +43,12 @@ export function SOSConfirmModal() {
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener("keydown", handleKeyDown);
       previousActive.current?.focus();
     };
-  }, []);
+  }, [closeModal]);
 
   const handleConfirm = () => {
     closeModal();
@@ -58,12 +65,20 @@ export function SOSConfirmModal() {
     >
       <div className="modal-dialog">
         <h2 id="sos-title">Emergency SOS</h2>
-        <p id="sos-desc">Are you sure you want to trigger Emergency SOS? This will notify your emergency contacts.</p>
+        <p id="sos-desc">
+          Are you sure you want to trigger Emergency SOS? This will notify your
+          emergency contacts.
+        </p>
         <div className="modal-actions">
           <button type="button" onClick={closeModal}>
             Cancel
           </button>
-          <button type="button" className="primary" onClick={handleConfirm} autoFocus>
+          <button
+            type="button"
+            className="primary"
+            onClick={handleConfirm}
+            autoFocus
+          >
             Confirm SOS
           </button>
         </div>

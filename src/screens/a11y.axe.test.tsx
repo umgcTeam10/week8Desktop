@@ -6,6 +6,7 @@ import { SearchScreen } from "./SearchScreen";
 import { MessagesScreen } from "./MessagesScreen";
 import { CalendarScreen } from "./CalendarScreen";
 import { ProfileScreen } from "./ProfileScreen";
+import { SOSConfirmModal } from "../components/SOSConfirmModal";
 
 expect.extend(toHaveNoViolations);
 
@@ -41,6 +42,14 @@ describe("axe: CalendarScreen", () => {
 describe("axe: ProfileScreen", () => {
   it("has no accessibility violations", async () => {
     const container = wrap(<ProfileScreen />);
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
+});
+
+describe("axe: SOSConfirmModal", () => {
+  it("has no accessibility violations", async () => {
+    const container = wrap(<SOSConfirmModal />);
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });

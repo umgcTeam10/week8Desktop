@@ -11,6 +11,50 @@ export function TasksScreen() {
   const tabs = ['Upcoming', 'Today', 'Overdue', 'Done'] as const;
   const [activeTab, setActiveTab] = React.useState<(typeof tabs)[number]>('Today');
   const tabRefs = React.useRef<Array<HTMLButtonElement | null>>([]);
+  const contrastStyles = `
+    .tasks-page .tag-blue {
+      background: #dcecf9;
+      border-color: #c7ddf1;
+      color: #1f5f8c;
+    }
+
+    .tasks-page .dashboard-heading p {
+      color: #43617c;
+    }
+
+    .tasks-page .dashboard-card span {
+      color: #586f87;
+    }
+
+    .tasks-page .alert-banner {
+      color: #8f5513;
+    }
+
+    .tasks-page .tasks-tabs [role="tab"] {
+      color: #4c6278;
+    }
+
+    .tasks-page .tasks-tabs [role="tab"][aria-selected="true"] {
+      color: #1e5f8f;
+      border-bottom-color: #1e5f8f;
+    }
+
+    .tasks-page .task-item-header .tag {
+      color: #8b560f;
+    }
+
+    .tasks-page .task-item-chip {
+      color: #26608c;
+    }
+
+    .tasks-page .tasks-now-card > p:not(.tasks-now-label) {
+      color: #55708a;
+    }
+
+    .tasks-page .tasks-now-card .tasks-now-label {
+      color: #fff;
+    }
+  `;
 
   const handleTabKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
     let nextIndex = index;
@@ -28,6 +72,7 @@ export function TasksScreen() {
 
   return (
     <div className="app-page tasks-page">
+      <style>{contrastStyles}</style>
       <header className="app-page-topbar" aria-label="Tasks status">
         <h2>Tasks</h2>
         <p>Monday, January 26, 2026 | 4:02 PM</p>

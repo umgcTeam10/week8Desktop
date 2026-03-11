@@ -61,9 +61,9 @@ export function MessagesScreen() {
         </div>
       </header>
 
-      <div className="messages-layout layout-two-panel">
-        <PersistentNowBar />
+      <PersistentNowBar />
 
+      <div className="messages-layout layout-two-panel">
         {/* ── Left panel: contacts + conversation list ─────────────── */}
         <aside
           className="panel-side messages-side"

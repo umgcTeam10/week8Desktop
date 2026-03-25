@@ -33,7 +33,10 @@ export function ProfileScreen() {
         <h2>Profile &amp; Settings</h2>
         <p>Monday, January 26, 2026 | 4:02 PM</p>
         <div className="app-page-user">
-          Robert <span className="tag tag-blue" style={patientTagStyle}>Patient</span>
+          Robert{" "}
+          <span className="tag tag-blue" style={patientTagStyle}>
+            Patient
+          </span>
         </div>
       </header>
 
